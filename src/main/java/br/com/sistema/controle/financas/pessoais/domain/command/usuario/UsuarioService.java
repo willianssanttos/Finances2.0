@@ -1,17 +1,18 @@
 package br.com.sistema.controle.financas.pessoais.domain.command.usuario;
 
-import br.com.sistema.controle.financas.pessoais.adapter.output.conta.SaldoDaoImpl;
-import br.com.sistema.controle.financas.pessoais.port.input.conta.IConta;
+import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.request.UsuarioRequest;
+import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
 import br.com.sistema.controle.financas.pessoais.port.input.usuario.IUsuario;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoDao;
-import br.com.sistema.controle.financas.pessoais.adapter.output.usuario.UsuarioDaoImpl;
 import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioDao;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.SaldoEntity;
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
 import br.com.sistema.controle.financas.pessoais.security.PasswordSecurity;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
+import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarNumeroCelular;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -19,22 +20,31 @@ import java.time.LocalDateTime;
 
 @Service
 public class UsuarioService implements IUsuario {
+
+    @Autowired
     private IUsuarioDao IUsuarioDao;
+    @Autowired
     private ISaldoDao ISaldoDao;
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
-    public UsuarioService() {
-        this.IUsuarioDao = new UsuarioDaoImpl();
-        this.ISaldoDao = new SaldoDaoImpl();
-    }
 
-    public UsuarioEntity criarUsuario(UsuarioEntity usuario) {
+    public UsuarioResponse criarUsuario(UsuarioRequest usuario) {
+
+        if (!ValidarNumeroCelular.validarNumeroCelular(usuario.getNumeroCelular())) {
+            logger.error(Constantes.cadastroCelular);
+        }
+
+
         try {
-            usuario.setSenhaUsuario(PasswordSecurity.encriptarSenha(usuario.getSenhaUsuario()));
 
-            UsuarioEntity novoUsuario = IUsuarioDao.criarUsuario(usuario);
+            UsuarioEntity novoUsuario = new UsuarioEntity();
+            novoUsuario.setNomeUsuario(usuario.getNomeUsuario());
+            novoUsuario.setEmailUsuario(usuario.getEmailUsuario());
+            novoUsuario.setSenhaUsuario(PasswordSecurity.encriptarSenha(usuario.getSenhaUsuario()));
+            novoUsuario.setNumeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()));
+            UsuarioEntity usuarioCriado =  IUsuarioDao.criarUsuario(novoUsuario);
 
-            if (novoUsuario.getIdUsuario() != null) {
+            if (usuarioCriado.getIdUsuario() != null) {
                 SaldoEntity inserirSaldo = new SaldoEntity();
                 inserirSaldo.setIdUsuario(novoUsuario.getIdUsuario());
                 inserirSaldo.setSaldoAtual(0.00);
@@ -42,11 +52,11 @@ public class UsuarioService implements IUsuario {
 
                 ISaldoDao.inserirSaldo(inserirSaldo);
             }
-            return novoUsuario;
+            return new UsuarioResponse(usuarioCriado.getIdUsuario(), usuarioCriado.getNomeUsuario(), usuarioCriado.getEmailUsuario(), usuarioCriado.getSenhaUsuario(), usuarioCriado.getNumeroCelular());
         } catch (Exception e){
             logger.error(Constantes.ErroCadastroUsuario, e);
         }
-        return usuario;
+        return new UsuarioResponse();
     }
 
 //    public Boolean emailExiste(String email) {

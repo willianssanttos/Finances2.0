@@ -2,11 +2,9 @@ package br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.requ
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
 public class UsuarioRequest {
 
     private Integer idUsuario;
