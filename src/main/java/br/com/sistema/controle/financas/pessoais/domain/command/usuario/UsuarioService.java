@@ -34,7 +34,6 @@ public class UsuarioService implements IUsuario {
             logger.error(Constantes.cadastroCelular);
         }
 
-
         try {
 
             UsuarioEntity novoUsuario = new UsuarioEntity();
