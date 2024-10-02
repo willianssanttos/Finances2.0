@@ -1,7 +1,8 @@
 package br.com.sistema.controle.financas.pessoais.domain.command.usuario;
 
 import br.com.sistema.controle.financas.pessoais.adapter.output.conta.SaldoDaoImpl;
-import br.com.sistema.controle.financas.pessoais.port.input.usuario.IConta;
+import br.com.sistema.controle.financas.pessoais.port.input.conta.IConta;
+import br.com.sistema.controle.financas.pessoais.port.input.usuario.IUsuario;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoDao;
 import br.com.sistema.controle.financas.pessoais.adapter.output.usuario.UsuarioDaoImpl;
 import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioDao;
@@ -11,11 +12,13 @@ import br.com.sistema.controle.financas.pessoais.security.PasswordSecurity;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-public class UsuarioService implements IConta {
+@Service
+public class UsuarioService implements IUsuario {
     private IUsuarioDao IUsuarioDao;
     private ISaldoDao ISaldoDao;
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
