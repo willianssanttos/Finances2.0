@@ -11,22 +11,22 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public class UsuarioDaoImpl implements IUsuarioDao {
+public class UsuarioRepositoryImpl implements IUsuarioDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private static final Logger logger = LoggerFactory.getLogger(UsuarioDaoImpl.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(UsuarioRepositoryImpl.class);
 
     @Override
     public UsuarioEntity criarUsuario(UsuarioEntity usuario){
-        logger.debug(Constantes.DebugRegistroProcesso + usuario);
         try {
             String sql = "SELECT inserir_usuario(?,?,?,?)";
-            jdbcTemplate.queryForObject(sql,new Object[]{
+            Integer IdUsuario = jdbcTemplate.queryForObject(sql, new Object[]{
                     usuario.getNomeUsuario(), usuario.getEmailUsuario(), usuario.getSenhaUsuario(),usuario.getNumeroCelular()
             },Integer.class);
+            usuario.setIdUsuario(IdUsuario);
 
-           logger.info(Constantes.InfoRegistrar + usuario);
         } catch (Exception e){
             logger.error(Constantes.ErroRegistrarNoServidor);
         }

@@ -1,8 +1,9 @@
 package br.com.sistema.controle.financas.pessoais.port.input.usuario;
 
-import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
+import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.request.UsuarioRequest;
+import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
 
 public interface IUsuario {
 
-    UsuarioEntity criarUsuario(UsuarioEntity usuario);
+    UsuarioResponse criarUsuario(UsuarioRequest usuario);
 }
