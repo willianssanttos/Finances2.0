@@ -1,0 +1,12 @@
+
+Y
+java:S2629"7Use the built-in formatting to construct this argument.(ş‚ä¤üÿÿÿÿ8´öç¤2
+Y
+java:S2629"7Use the built-in formatting to construct this argument.(…ªòıÿÿÿÿ8¸öç¤2
+c
+java:S3457"AFormat specifiers should be used instead of string concatenation.(ş‚ä¤üÿÿÿÿ8² öç¤2
+L
+java:S1874"6Remove this use of "queryForObject"; it is deprecated.(ÜŠô 
+c
+java:S3457"AFormat specifiers should be used instead of string concatenation.(…ªòıÿÿÿÿ8» öç¤2
+V	java:S125#"<This block of commented-out lines of code should be removed.(°µçıÿÿÿÿ
