@@ -8,18 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 public class UsuarioEntity extends SaldoEntity {
 
-    private Integer idUsuario;
     private String nomeUsuario;
     private String emailUsuario;
     private String senhaUsuario;
     private String numeroCelular;
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
-    }
 
     public String getNomeUsuario() {
         return nomeUsuario;
