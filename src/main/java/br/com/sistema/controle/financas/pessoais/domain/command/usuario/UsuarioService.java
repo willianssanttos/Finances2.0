@@ -9,6 +9,7 @@ import br.com.sistema.controle.financas.pessoais.domain.entity.conta.SaldoEntity
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
 import br.com.sistema.controle.financas.pessoais.security.PasswordSecurity;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
+import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarEmail;
 import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarNumeroCelular;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +31,21 @@ public class UsuarioService implements IUsuario {
 
     public UsuarioResponse criarUsuario(UsuarioRequest usuario) {
 
-        if (!ValidarNumeroCelular.validarNumeroCelular(usuario.getNumeroCelular())) {
-            logger.error(Constantes.cadastroCelular);
+        if(!ValidarEmail.validaEmail(usuario.getEmailUsuario())){
+            throw new IllegalArgumentException(Constantes.cadastroEmail);
         }
 
-        try {
+        Boolean emailExiste = IUsuarioDao.verificarEmailExistente(usuario.getEmailUsuario());
+        if (emailExiste != null && emailExiste){
+            throw new IllegalArgumentException(Constantes.EmailJaCadastrado);
+        }
 
+        if (!ValidarNumeroCelular.validarNumeroCelular(usuario.getNumeroCelular())) {
+            throw new IllegalArgumentException(Constantes.cadastroCelular);
+        }
+
+
+        try {
             UsuarioEntity novoUsuario = new UsuarioEntity();
             novoUsuario.setNomeUsuario(usuario.getNomeUsuario());
             novoUsuario.setEmailUsuario(usuario.getEmailUsuario());
@@ -58,26 +68,5 @@ public class UsuarioService implements IUsuario {
         return new UsuarioResponse();
     }
 
-//    public Boolean emailExiste(String email) {
-//        try {
-//            return IUsuarioDao.verificarEmailExistente(email);
-//        } catch (Exception e) {
-//            logger.error(Constantes.ErroVerificarEmail, e);
-//        }
-//        return emailExiste(email);
-//    }
-//
-//    public UsuarioEntity autenticarUsuario(String email, String senha) {
-//        try {
-//            UsuarioEntity usuario = IUsuarioDao.validarLogin(email);
-//            boolean senhaValida = PasswordSecurity.checkSenha(senha, usuario.getSenhaUsuario());
-//
-//            if (!senhaValida){
-//                return null;
-//            }
-//        } catch (Exception e){
-//            logger.error(Constantes.erroLoginConta, e);
-//        }
-//        return autenticarUsuario(email,senha);
-//    }
+
 }

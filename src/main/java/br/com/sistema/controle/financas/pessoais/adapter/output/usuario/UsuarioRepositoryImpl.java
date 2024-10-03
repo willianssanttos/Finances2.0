@@ -6,6 +6,7 @@ import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -32,47 +33,14 @@ public class UsuarioRepositoryImpl implements IUsuarioDao {
         }
         return usuario;
     }
-//    public boolean verificarEmailExistente(String email) {
-//        logger.debug(Constantes.ErroBuscarRegistroNoServidor + email);
-//        try{
-//        String sql = "SELECT verificar_email_existente(?)";
-//        boolean emailExiste = false;
-//
-//        return jdbcTemplate.queryForObject(sql, Boolean.class,emailExiste);
-//            logger.info(Constantes.InfoBuscar + email);
-//        } catch (Exception e) {
-//            logger.error(Constantes.ErroBuscarRegistroNoServidor);
-//        }
-//        return email;
-//
-//    }
-//
-//    public UsuarioEntity validarLogin(String email) {
-//        logger.debug(Constantes.DebugBuscarProcesso + email);
-//
-//        String sql = "SELECT * FROM validar_login(?)";
-//
-//       UsuarioEntity usuario = null;
-//
-//        try (Connection conn = DataSourceConfig.getConexao();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setString(1, email);
-//            ResultSet rs = ps.executeQuery();
-//
-//            if (rs.next()) {
-//                usuario = new UsuarioEntity();
-//
-//                usuario.setIdUsuario(rs.getInt("nr_id_usuario"));
-//                usuario.setEmailUsuario(rs.getString("ds_email"));
-//                usuario.setSenhaUsuario(rs.getString("ds_senha"));
-//            }
-//            rs.close();
-//
-//            logger.info(Constantes.InfoBuscar + email);
-//        } catch (SQLException e) {
-//            logger.error(Constantes.ErroBuscarRegistroNoServidor);
-//        }
-//        return usuario;
-//    }
+    public boolean verificarEmailExistente(String email) {
+        String sql = "SELECT verificar_email_existente(?)";
+        try{
+        return jdbcTemplate.queryForObject(sql, Boolean.class, email);
+        } catch (Exception e) {
+            logger.error(Constantes.ErroBuscarRegistroNoServidor);
+        }
+        return verificarEmailExistente(email);
+    }
+
 }
