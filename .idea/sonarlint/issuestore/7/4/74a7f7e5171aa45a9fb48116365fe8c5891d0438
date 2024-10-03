@@ -1,4 +1,3 @@
 
-r	java:S116"VRename this field "IUsuarioDao" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ“äÅ8ß¹ï¥2
-u	java:S116"TRename this field "ISaldoDao" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(×¼‰©øÿÿÿÿ8à¹ï¥2
-X	java:S125="<This block of commented-out lines of code should be removed.(ÄŒŸ–8²Â½ê¤2
+r	java:S116"VRename this field "IUsuarioDao" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ“äÅ8»ÆŒ“¥2
+u	java:S116"TRename this field "ISaldoDao" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(×¼‰©øÿÿÿÿ8»ÆŒ“¥2

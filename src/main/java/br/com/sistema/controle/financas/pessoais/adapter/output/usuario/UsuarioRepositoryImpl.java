@@ -40,7 +40,7 @@ public class UsuarioRepositoryImpl implements IUsuarioDao {
         } catch (Exception e) {
             logger.error(Constantes.ErroBuscarRegistroNoServidor);
         }
-        return verificarEmailExistente(email);
+        return false;
     }
 
 }
