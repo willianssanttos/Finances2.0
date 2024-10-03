@@ -1,7 +1,7 @@
-package br.com.sistema.controle.financas.pessoais.domain.entity.conta;
+package br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response;
 
+import br.com.sistema.controle.financas.pessoais.domain.command.Enum.TipoContaEnum;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,15 +10,11 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
-public class ContaEntity extends SaldoEntity{
+public class ContaResponse {
 
     private Integer idConta;
     private String nomeConta;
     private Double saldoConta;
-    private String tipoConta;
+    private TipoContaEnum tipoConta;
     private Timestamp dataDeposito;
-
 }
-
-

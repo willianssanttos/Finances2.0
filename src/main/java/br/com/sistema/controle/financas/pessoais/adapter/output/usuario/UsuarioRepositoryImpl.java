@@ -1,18 +1,17 @@
 package br.com.sistema.controle.financas.pessoais.adapter.output.usuario;
 
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
-import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioDao;
+import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioRepository;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public class UsuarioRepositoryImpl implements IUsuarioDao {
+public class UsuarioRepositoryImpl implements IUsuarioRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

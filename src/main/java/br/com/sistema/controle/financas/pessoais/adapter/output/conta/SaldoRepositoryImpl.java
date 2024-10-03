@@ -1,6 +1,6 @@
 package br.com.sistema.controle.financas.pessoais.adapter.output.conta;
 
-import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoDao;
+import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.SaldoEntity;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 import org.slf4j.Logger;
@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class SaldoRepositoryImpl implements ISaldoDao {
+public class SaldoRepositoryImpl implements ISaldoRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -25,7 +25,6 @@ public class SaldoRepositoryImpl implements ISaldoDao {
         Integer idSaldo = jdbcTemplate.queryForObject(sql, new Object[]{ saldo.getIdUsuario(), saldo.getSaldoAtual(), saldo.getDataAtualizadaSaldo()
         }, Integer.class);
         saldo.setIdSaldo(idSaldo);
-            logger.info(Constantes.InfoRegistrar + saldo);
         } catch (Exception e){
            logger.error(Constantes.ErroRegistrarNoServidor);
         }

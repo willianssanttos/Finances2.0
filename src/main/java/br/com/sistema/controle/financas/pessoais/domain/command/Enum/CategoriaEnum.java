@@ -1,4 +1,4 @@
-package br.com.sistema.controle.financas.pessoais.Enum;
+package br.com.sistema.controle.financas.pessoais.domain.command.Enum;
 
 public enum CategoriaEnum {
 

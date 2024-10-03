@@ -3,8 +3,8 @@ package br.com.sistema.controle.financas.pessoais.domain.command.usuario;
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.request.UsuarioRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
 import br.com.sistema.controle.financas.pessoais.port.input.usuario.IUsuario;
-import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoDao;
-import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioDao;
+import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
+import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.SaldoEntity;
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
 import br.com.sistema.controle.financas.pessoais.security.PasswordSecurity;
@@ -23,9 +23,9 @@ import java.time.LocalDateTime;
 public class UsuarioService implements IUsuario {
 
     @Autowired
-    private IUsuarioDao IUsuarioDao;
+    private IUsuarioRepository IUsuarioRepository;
     @Autowired
-    private ISaldoDao ISaldoDao;
+    private ISaldoRepository ISaldoRepository;
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
 
@@ -35,7 +35,7 @@ public class UsuarioService implements IUsuario {
             throw new IllegalArgumentException(Constantes.cadastroEmail);
         }
 
-        Boolean emailExiste = IUsuarioDao.verificarEmailExistente(usuario.getEmailUsuario());
+        Boolean emailExiste = IUsuarioRepository.verificarEmailExistente(usuario.getEmailUsuario());
         if (emailExiste != null && emailExiste){
             throw new IllegalArgumentException(Constantes.EmailJaCadastrado);
         }
@@ -51,7 +51,7 @@ public class UsuarioService implements IUsuario {
             novoUsuario.setEmailUsuario(usuario.getEmailUsuario());
             novoUsuario.setSenhaUsuario(PasswordSecurity.encriptarSenha(usuario.getSenhaUsuario()));
             novoUsuario.setNumeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()));
-            UsuarioEntity usuarioCriado =  IUsuarioDao.criarUsuario(novoUsuario);
+            UsuarioEntity usuarioCriado =  IUsuarioRepository.criarUsuario(novoUsuario);
 
             if (usuarioCriado.getIdUsuario() != null) {
                 SaldoEntity inserirSaldo = new SaldoEntity();
@@ -59,7 +59,7 @@ public class UsuarioService implements IUsuario {
                 inserirSaldo.setSaldoAtual(0.00);
                 inserirSaldo.setDataAtualizadaSaldo(Timestamp.valueOf(LocalDateTime.now()));
 
-                ISaldoDao.inserirSaldo(inserirSaldo);
+                ISaldoRepository.inserirSaldo(inserirSaldo);
             }
             return new UsuarioResponse(usuarioCriado.getIdUsuario(), usuarioCriado.getNomeUsuario(), usuarioCriado.getEmailUsuario(), usuarioCriado.getSenhaUsuario(), usuarioCriado.getNumeroCelular());
         } catch (Exception e){

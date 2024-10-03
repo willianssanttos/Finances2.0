@@ -1,47 +1,36 @@
-//package br.com.sistema.controle.financas.pessoais.adapter.output.conta;
-//
-//import br.com.sistema.controle.financas.pessoais.port.output.conta.IContaDao;
-//import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
-//import br.com.sistema.controle.financas.pessoais.utils.Constantes;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//
-//import java.sql.*;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class ContaDaoImpl implements IContaDao {
-//    private static final Logger logger = LoggerFactory.getLogger(ContaDaoImpl.class);
-//
-//    public ContaEntity criarConta(ContaEntity conta){
-//        logger.debug(Constantes.DebugRegistroProcesso + conta);
-//
-//        String sql = "SELECT inserir_conta(?,?,?,?,?,?)";
-//
-//        try (Connection conn = DataSourceConfig.getConexao();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setInt(1, conta.getIdUsuario());
-//            ps.setInt(2, conta.getIdSaldo());
-//            ps.setString(3, conta.getTipoConta());
-//            ps.setString(4, conta.getNomeConta());
-//            ps.setDouble(5, conta.getSaldoConta());
-//            ps.setTimestamp(6, conta.getDataDeposito());
-//
-//            ResultSet rs = ps.executeQuery();
-//            if (rs.next()){
-//                int idConta = rs.getInt(1);
-//                conta.setIdConta(idConta);
-//            }
-//            rs.close();
-//
-//            logger.info(Constantes.InfoRegistrar + conta);
-//        } catch (SQLException e){
-//            logger.error(Constantes.ErroRegistrarNoServidor);
-//        }
-//        return conta;
-//    }
-//
+package br.com.sistema.controle.financas.pessoais.adapter.output.conta;
+
+import br.com.sistema.controle.financas.pessoais.port.output.conta.IContaRepository;
+import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
+import br.com.sistema.controle.financas.pessoais.utils.Constantes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class ContaRepositoryImpl implements IContaRepository {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(ContaRepositoryImpl.class);
+
+    public ContaEntity criarConta(ContaEntity conta){
+
+        String sql = "SELECT inserir_conta(?,?,?,?,?,?)";
+        try{
+            Integer IdConta = jdbcTemplate.queryForObject(sql, new Object[]{
+                    conta.getIdUsuario(), conta.getIdSaldo(), conta.getTipoConta(), conta.getNomeConta(), conta.getSaldoConta(), conta.getDataDeposito()
+            }, Integer.class);
+                conta.setIdConta(IdConta);
+
+        } catch (Exception e){
+            logger.error(Constantes.ErroRegistrarNoServidor);
+        }
+        return conta;
+    }
+
 //    public List<ContaEntity> obterContasPorUsuario(Integer idUsuario) {
 //        logger.debug(Constantes.DebugBuscarProcesso + idUsuario);
 //
@@ -109,5 +98,5 @@
 //            logger.error(Constantes.ErroDeletarRegistroNoServidor);
 //        }
 //    }
-//}
-//
+}
+
