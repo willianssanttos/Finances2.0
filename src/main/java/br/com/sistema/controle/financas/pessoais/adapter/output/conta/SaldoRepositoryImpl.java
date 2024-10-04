@@ -24,12 +24,13 @@ public class SaldoRepositoryImpl implements ISaldoRepository {
 
         try{
         String sql = "SElECT inserir_saldo(?,?,?)";
-        Integer idSaldo = jdbcTemplate.queryForObject(sql, new Object[]{
-                saldo.getIdUsuario(),
-                saldo.getSaldoAtual(),
-                saldo.getDataAtualizadaSaldo()
-        }, Integer.class);
-        saldo.setIdSaldo(idSaldo);
+            Integer idSaldo = jdbcTemplate.queryForObject(sql, new Object[]{
+                    saldo.getIdUsuario(),
+                    saldo.getSaldoAtual(),
+                    saldo.getDataAtualizadaSaldo()
+            }, Integer.class);
+            saldo.setIdSaldo(idSaldo);
+
         } catch (Exception e){
            logger.error(Constantes.ErroRegistrarNoServidor);
         }

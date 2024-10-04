@@ -18,7 +18,8 @@ public class RestExceptionHandler {
     @ExceptionHandler({
             Exception.class,
             CriarUsuarioException.class,
-            CriarContaException.class
+            CriarContaException.class,
+            CriarTransacaoException.class
     })
     public ResponseEntity<ApiError> genericException(Exception ex) {
         ApiError apiError = ApiError

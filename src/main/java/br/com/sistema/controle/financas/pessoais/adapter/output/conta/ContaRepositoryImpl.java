@@ -35,7 +35,8 @@ public class ContaRepositoryImpl implements IContaRepository {
                     conta.getSaldoConta(),
                     conta.getDataDeposito()
             }, Integer.class);
-                conta.setIdConta(IdConta);
+            conta.setIdConta(IdConta);
+
         } catch (DataAccessException e){
             logger.error(Constantes.ErroRegistrarNoServidor);
             throw new CriarContaException();
