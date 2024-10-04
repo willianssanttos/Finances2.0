@@ -2,10 +2,10 @@ package br.com.sistema.controle.financas.pessoais.domain.command.usuario;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.request.UsuarioRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
-import br.com.sistema.controle.financas.pessoais.domain.exception.EmailNotFoundException;
+import br.com.sistema.controle.financas.pessoais.domain.exception.EmailExistenteException;
 import br.com.sistema.controle.financas.pessoais.domain.exception.EmailValidacaoException;
 import br.com.sistema.controle.financas.pessoais.domain.exception.NumeroCelularValidacaoException;
-import br.com.sistema.controle.financas.pessoais.domain.exception.UsuarioNotFoundException;
+import br.com.sistema.controle.financas.pessoais.domain.exception.CriarUsuarioException;
 import br.com.sistema.controle.financas.pessoais.port.input.usuario.IUsuario;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
 import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioRepository;
@@ -33,15 +33,15 @@ public class UsuarioService implements IUsuario {
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
     public UsuarioResponse criarUsuario(UsuarioRequest usuario) {
-
         logger.info(Constantes.DebugRegistroProcesso);
+
         if(!ValidarEmail.validaEmail(usuario.getEmailUsuario())){
             throw new EmailValidacaoException();
         }
 
         Boolean emailExiste = IUsuarioRepository.verificarEmailExistente(usuario.getEmailUsuario());
         if (emailExiste != null && emailExiste){
-            throw new EmailNotFoundException();
+            throw new EmailExistenteException();
         }
 
         if (!ValidarNumeroCelular.validarNumeroCelular(usuario.getNumeroCelular())) {
@@ -49,30 +49,36 @@ public class UsuarioService implements IUsuario {
         }
 
         try {
-            UsuarioEntity novoUsuario = new UsuarioEntity();
-            novoUsuario.setNomeUsuario(usuario.getNomeUsuario());
-            novoUsuario.setEmailUsuario(usuario.getEmailUsuario());
-            novoUsuario.setSenhaUsuario(PasswordSecurity.encriptarSenha(usuario.getSenhaUsuario()));
-            novoUsuario.setNumeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()));
+            UsuarioEntity novoUsuario = UsuarioEntity.builder()
+                    .nomeUsuario(usuario.getNomeUsuario())
+                    .emailUsuario(usuario.getEmailUsuario())
+                    .senhaUsuario(usuario.getSenhaUsuario())
+                    .numeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()))
+                    .build();
+
             UsuarioEntity usuarioCriado =  IUsuarioRepository.criarUsuario(novoUsuario);
 
-            if (usuarioCriado.getIdUsuario() != null) {
-                SaldoEntity inserirSaldo = new SaldoEntity();
-                inserirSaldo.setIdUsuario(novoUsuario.getIdUsuario());
-                inserirSaldo.setSaldoAtual(0.00);
-                inserirSaldo.setDataAtualizadaSaldo(Timestamp.valueOf(LocalDateTime.now()));
+            SaldoEntity inserirSaldo = SaldoEntity.builder()
+                    .idUsuario(usuarioCriado.getIdUsuario())
+                    .saldoAtual(0.00)
+                    .dataAtualizadaSaldo(Timestamp.valueOf(LocalDateTime.now()))
+                    .build();
 
-                ISaldoRepository.inserirSaldo(inserirSaldo);
-            }
-            return new UsuarioResponse(
-                    usuarioCriado.getIdUsuario(),
-                    usuarioCriado.getNomeUsuario(),
-                    usuarioCriado.getEmailUsuario(),
-                    usuarioCriado.getSenhaUsuario(),
-                    usuarioCriado.getNumeroCelular());
+            SaldoEntity saldoCriado = ISaldoRepository.inserirSaldo(inserirSaldo);
+
+            return mapearUsuario(usuarioCriado);
         } catch (Exception e){
-            throw new UsuarioNotFoundException();
+            logger.error(Constantes.ErroRegistrarNoServidor);
+            throw new CriarUsuarioException();
         }
+    }
+    public UsuarioResponse mapearUsuario(UsuarioEntity usuarioCriado){
+        return UsuarioResponse.builder()
+                .nomeUsuario(usuarioCriado.getNomeUsuario())
+                .emailUsuario(usuarioCriado.getEmailUsuario())
+                .senhaUsuario(usuarioCriado.getSenhaUsuario())
+                .numeroCelular(usuarioCriado.getNumeroCelular())
+                .build();
     }
 
 

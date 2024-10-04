@@ -1,6 +1,5 @@
 package br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.request;
 
-import br.com.sistema.controle.financas.pessoais.domain.command.Enum.TipoContaEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +12,10 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class ContaRequest extends SaldoRequest {
+public class SaldoRequest {
 
-    private String nomeConta;
-    private Double saldoConta;
-    private TipoContaEnum tipoConta;
-    private Timestamp dataDeposito;
+    private Integer idSaldo;
+    private Integer idUsuario;
+    private Double saldoAtual;
+    private Timestamp dataAtualizadaSaldo;
 }

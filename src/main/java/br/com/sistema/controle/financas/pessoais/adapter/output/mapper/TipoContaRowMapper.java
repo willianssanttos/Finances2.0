@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TipoContaRowMapper implements RowMapper<TipoContaEntity> {
-
-    @Override
     public TipoContaEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
         TipoContaEntity tipoConta = new TipoContaEntity();
         tipoConta.setIdTipoConta(rs.getInt(1));

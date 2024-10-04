@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class SaldoRepositoryImpl implements ISaldoRepository {
@@ -17,12 +18,16 @@ public class SaldoRepositoryImpl implements ISaldoRepository {
     private static final Logger logger = LoggerFactory.getLogger(SaldoRepositoryImpl.class);
 
     @Override
+    @Transactional
     public SaldoEntity inserirSaldo(SaldoEntity saldo){
-        logger.debug(Constantes.DebugRegistroProcesso + saldo);
+        logger.info(Constantes.DebugRegistroProcesso);
 
         try{
         String sql = "SElECT inserir_saldo(?,?,?)";
-        Integer idSaldo = jdbcTemplate.queryForObject(sql, new Object[]{ saldo.getIdUsuario(), saldo.getSaldoAtual(), saldo.getDataAtualizadaSaldo()
+        Integer idSaldo = jdbcTemplate.queryForObject(sql, new Object[]{
+                saldo.getIdUsuario(),
+                saldo.getSaldoAtual(),
+                saldo.getDataAtualizadaSaldo()
         }, Integer.class);
         saldo.setIdSaldo(idSaldo);
         } catch (Exception e){
@@ -30,28 +35,4 @@ public class SaldoRepositoryImpl implements ISaldoRepository {
         }
         return saldo;
     }
-
-//    public Double obterSaldoPorIdUsuario(Integer idUsuario) {
-//        logger.debug(Constantes.DebugBuscarProcesso + idUsuario);
-//
-//        String sql = "SELECT obter_saldo_total(?)";
-//
-//        double saldoTotal = 0.0;
-//        try (Connection conn = DataSourceConfig.getConexao();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setInt(1, idUsuario);
-//            ResultSet rs = ps.executeQuery();
-//
-//            if (rs.next()){
-//                saldoTotal = rs.getDouble(1);
-//            }
-//            rs.close();
-//
-//            logger.info(Constantes.InfoBuscar + idUsuario);
-//        } catch (SQLException e) {
-//            logger.error(Constantes.ErroBuscarRegistroNoServidor);
-//        }
-//        return saldoTotal;
-//    }
 }

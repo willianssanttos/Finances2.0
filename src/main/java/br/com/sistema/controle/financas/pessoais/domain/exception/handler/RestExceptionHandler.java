@@ -15,7 +15,11 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class RestExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({
+            Exception.class,
+            CriarUsuarioException.class,
+            CriarContaException.class
+    })
     public ResponseEntity<ApiError> genericException(Exception ex) {
         ApiError apiError = ApiError
                 .builder()
@@ -40,11 +44,7 @@ public class RestExceptionHandler {
 //    }
 
     @ExceptionHandler({
-            UsuarioNotFoundException.class,
-            EmailNotFoundException.class,
-            TipoContaNotFoundException.class,
-            ContaNotFoundException.class
-
+            TipoContaNotFoundException.class
              })
     public ResponseEntity<ApiError> notFoundException(RuntimeException ex) {
         ApiError apiError = ApiError
@@ -60,6 +60,21 @@ public class RestExceptionHandler {
     @ExceptionHandler({
             EmailValidacaoException.class,
             NumeroCelularValidacaoException.class
+
+    })
+    public ResponseEntity<ApiError> badRequetException(RuntimeException ex) {
+        ApiError apiError = ApiError
+                .builder()
+                .timestamp(LocalDateTime.now())
+                .code(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.BAD_REQUEST.name())
+                .errors(List.of(ex.getMessage()))
+                .build();
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({
+            EmailExistenteException.class
             })
     public ResponseEntity<ApiError> unavailableException(RuntimeException ex) {
         ApiError apiError = ApiError

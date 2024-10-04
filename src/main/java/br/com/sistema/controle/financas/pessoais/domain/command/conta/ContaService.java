@@ -2,13 +2,15 @@ package br.com.sistema.controle.financas.pessoais.domain.command.conta;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.request.ContaRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response.ContaResponse;
+import br.com.sistema.controle.financas.pessoais.domain.command.Enum.TipoContaEnum;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.TipoContaEntity;
-import br.com.sistema.controle.financas.pessoais.domain.exception.ContaNotFoundException;
+import br.com.sistema.controle.financas.pessoais.domain.exception.CriarContaException;
 import br.com.sistema.controle.financas.pessoais.domain.exception.TipoContaNotFoundException;
 import br.com.sistema.controle.financas.pessoais.port.input.conta.IConta;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.IContaRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ITipoContaRepository;
+import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,8 @@ public class ContaService implements IConta {
 //    private ISaldoRepository ISaldoRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ContaService.class);
-
     public ContaResponse criarConta(ContaRequest conta){
+        logger.info(Constantes.DebugRegistroProcesso);
 
         TipoContaEntity tipoConta = iTipoContaRepository.obterTiposConta(conta.getTipoConta().name());
         if (tipoConta == null){
@@ -39,43 +41,40 @@ public class ContaService implements IConta {
         }
 
         try {
-        ContaEntity novaConta = new ContaEntity();
-        novaConta.setIdUsuario(conta.getIdUsuario());
-        novaConta.setIdSaldo(conta.getIdSaldo());
-        novaConta.setTipoConta(tipoConta.getNomeTipoConta());
-        novaConta.setNomeConta(conta.getNomeConta());
-        novaConta.setSaldoConta(conta.getSaldoConta());
-        novaConta.setDataDeposito(Timestamp.valueOf(LocalDateTime.now()));
+            ContaEntity novaConta = ContaEntity.builder()
+                    .idUsuario(conta.getIdUsuario())
+                    .idSaldo(conta.getIdSaldo())
+                    .nomeConta(conta.getNomeConta())
+                    .saldoConta(conta.getSaldoConta())
+                    .tipoConta(tipoConta.getNomeTipoConta())
+                    .dataDeposito(Timestamp.valueOf(LocalDateTime.now()))
+                    .build();
 
         ContaEntity contaCriada = IContaRepository.criarConta(novaConta);
-        return new ContaResponse(
-                contaCriada.getIdConta(),
-                contaCriada.getTipoConta(),
-                contaCriada.getNomeConta(),
-                contaCriada.getSaldoConta(),
-                contaCriada.getDataDeposito());
+        return mapearConta(tipoConta,contaCriada);
+
         } catch (Exception e){
-           throw new ContaNotFoundException();
+            logger.error(Constantes.ErroRegistrarNoServidor);
+           throw new CriarContaException();
         }
     }
-//    public ContaEntity criarConta(ContaEntity conta){
-//        try {
-//            return IContaRepository.criarConta(conta);
-//        } catch (Exception e){
-//            logger.error(Constantes.ErroCadastroConta);
-//        }
-//        return conta;
-//    }
 
-//    public List<String> obterTodosTiposConta() {
-//        try {
-//            return ITipoContaDao.obterTiposConta();
-//        } catch (Exception e){
-//            logger.error(Constantes.cadastroTipoConta);
-//        }
-//        return obterTodosTiposConta();
-//    }
-//
+    public ContaResponse mapearConta(TipoContaEntity tipoConta, ContaEntity contaCriada){
+        return ContaResponse.builder()
+                .nomeConta(contaCriada.getNomeConta())
+                .tipoConta(TipoContaEnum.valueOf(tipoConta.getNomeTipoConta()))
+                .saldoConta(contaCriada.getSaldoConta())
+                .dataDeposito(contaCriada.getDataDeposito())
+                .build();
+    }
+
+
+
+
+
+
+
+
 //    public void editarConta(ContaEntity conta){
 //        try {
 //            IContaDao.editarConta(conta);
