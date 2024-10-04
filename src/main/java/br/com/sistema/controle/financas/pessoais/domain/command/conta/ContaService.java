@@ -3,11 +3,12 @@ package br.com.sistema.controle.financas.pessoais.domain.command.conta;
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.request.ContaRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response.ContaResponse;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.TipoContaEntity;
+import br.com.sistema.controle.financas.pessoais.domain.exception.ContaNotFoundException;
+import br.com.sistema.controle.financas.pessoais.domain.exception.TipoContaNotFoundException;
 import br.com.sistema.controle.financas.pessoais.port.input.conta.IConta;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.IContaRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ITipoContaRepository;
-import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,29 +31,32 @@ public class ContaService implements IConta {
 
     private static final Logger logger = LoggerFactory.getLogger(ContaService.class);
 
-
     public ContaResponse criarConta(ContaRequest conta){
 
-        logger.debug("idUsuario" + conta.getIdUsuario(), "idSaldo" + conta.getIdSaldo());
-
         TipoContaEntity tipoConta = iTipoContaRepository.obterTiposConta(conta.getTipoConta().name());
-        if (tipoConta != null){
-            throw new IllegalArgumentException(Constantes.cadastroTipoConta);
+        if (tipoConta == null){
+            throw new TipoContaNotFoundException();
         }
+
         try {
         ContaEntity novaConta = new ContaEntity();
         novaConta.setIdUsuario(conta.getIdUsuario());
         novaConta.setIdSaldo(conta.getIdSaldo());
-        novaConta.setTipoConta(String.valueOf(conta.getTipoConta()));
+        novaConta.setTipoConta(tipoConta.getNomeTipoConta());
         novaConta.setNomeConta(conta.getNomeConta());
         novaConta.setSaldoConta(conta.getSaldoConta());
         novaConta.setDataDeposito(Timestamp.valueOf(LocalDateTime.now()));
 
         ContaEntity contaCriada = IContaRepository.criarConta(novaConta);
+        return new ContaResponse(
+                contaCriada.getIdConta(),
+                contaCriada.getTipoConta(),
+                contaCriada.getNomeConta(),
+                contaCriada.getSaldoConta(),
+                contaCriada.getDataDeposito());
         } catch (Exception e){
-            logger.error(Constantes.ErroCadastroUsuario, e);
+           throw new ContaNotFoundException();
         }
-        return new ContaResponse();
     }
 //    public ContaEntity criarConta(ContaEntity conta){
 //        try {

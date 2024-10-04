@@ -17,4 +17,7 @@ public class ContaResponse {
     private Double saldoConta;
     private TipoContaEnum tipoConta;
     private Timestamp dataDeposito;
+
+    public ContaResponse(Integer idConta, String tipoConta, String nomeConta, Double saldoConta, Timestamp dataDeposito) {
+    }
 }

@@ -20,7 +20,6 @@ public class ContaController implements IContaController {
 
     @PostMapping("/criar-conta")
     public ResponseEntity<ContaResponse> criaConta(@RequestBody ContaRequest conta) {
-        ContaResponse response = iConta.criarConta(conta);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return new ResponseEntity<>(iConta.criarConta(conta), HttpStatus.CREATED);
     }
 }

@@ -19,7 +19,7 @@ public class UsuarioController implements IUsuarioController{
     IUsuario iUsuario;
     @PostMapping("/criar-usuario")
     public ResponseEntity<UsuarioResponse> criaUsuario(@RequestBody UsuarioRequest usuario) {
-        UsuarioResponse response = iUsuario.criarUsuario(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return new ResponseEntity<>(iUsuario.criarUsuario(usuario), HttpStatus.CREATED);
+
     }
 }

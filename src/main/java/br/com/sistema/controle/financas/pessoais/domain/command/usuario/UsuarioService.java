@@ -2,6 +2,10 @@ package br.com.sistema.controle.financas.pessoais.domain.command.usuario;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.request.UsuarioRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
+import br.com.sistema.controle.financas.pessoais.domain.exception.EmailNotFoundException;
+import br.com.sistema.controle.financas.pessoais.domain.exception.EmailValidacaoException;
+import br.com.sistema.controle.financas.pessoais.domain.exception.NumeroCelularValidacaoException;
+import br.com.sistema.controle.financas.pessoais.domain.exception.UsuarioNotFoundException;
 import br.com.sistema.controle.financas.pessoais.port.input.usuario.IUsuario;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
 import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioRepository;
@@ -28,22 +32,21 @@ public class UsuarioService implements IUsuario {
     private ISaldoRepository ISaldoRepository;
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
-
     public UsuarioResponse criarUsuario(UsuarioRequest usuario) {
 
+        logger.info(Constantes.DebugRegistroProcesso);
         if(!ValidarEmail.validaEmail(usuario.getEmailUsuario())){
-            throw new IllegalArgumentException(Constantes.cadastroEmail);
+            throw new EmailValidacaoException();
         }
 
         Boolean emailExiste = IUsuarioRepository.verificarEmailExistente(usuario.getEmailUsuario());
         if (emailExiste != null && emailExiste){
-            throw new IllegalArgumentException(Constantes.EmailJaCadastrado);
+            throw new EmailNotFoundException();
         }
 
         if (!ValidarNumeroCelular.validarNumeroCelular(usuario.getNumeroCelular())) {
-            throw new IllegalArgumentException(Constantes.cadastroCelular);
+            throw new NumeroCelularValidacaoException();
         }
-
 
         try {
             UsuarioEntity novoUsuario = new UsuarioEntity();
@@ -61,11 +64,15 @@ public class UsuarioService implements IUsuario {
 
                 ISaldoRepository.inserirSaldo(inserirSaldo);
             }
-            return new UsuarioResponse(usuarioCriado.getIdUsuario(), usuarioCriado.getNomeUsuario(), usuarioCriado.getEmailUsuario(), usuarioCriado.getSenhaUsuario(), usuarioCriado.getNumeroCelular());
+            return new UsuarioResponse(
+                    usuarioCriado.getIdUsuario(),
+                    usuarioCriado.getNomeUsuario(),
+                    usuarioCriado.getEmailUsuario(),
+                    usuarioCriado.getSenhaUsuario(),
+                    usuarioCriado.getNumeroCelular());
         } catch (Exception e){
-            logger.error(Constantes.ErroCadastroUsuario, e);
+            throw new UsuarioNotFoundException();
         }
-        return new UsuarioResponse();
     }
 
 

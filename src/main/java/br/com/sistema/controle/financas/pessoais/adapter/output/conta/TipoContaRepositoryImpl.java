@@ -1,5 +1,6 @@
 package br.com.sistema.controle.financas.pessoais.adapter.output.conta;
 
+import br.com.sistema.controle.financas.pessoais.adapter.output.mapper.TipoContaRowMapper;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.TipoContaEntity;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ITipoContaRepository;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
@@ -19,7 +20,7 @@ public class TipoContaRepositoryImpl implements ITipoContaRepository {
 
     public TipoContaEntity obterTiposConta(String nomeTipoConta){
         String sql = "SELECT * FROM buscar_tipo_conta_por_nome(?)";
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(TipoContaEntity.class), nomeTipoConta);
+        return jdbcTemplate.queryForObject(sql, new Object[] { nomeTipoConta }, new TipoContaRowMapper());
 
     }
 //    public TipoContaEntity obterTiposConta(String nomeTipoConta) {

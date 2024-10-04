@@ -21,7 +21,12 @@ public class ContaRepositoryImpl implements IContaRepository {
         String sql = "SELECT inserir_conta(?,?,?,?,?,?)";
         try{
             Integer IdConta = jdbcTemplate.queryForObject(sql, new Object[]{
-                    conta.getIdUsuario(), conta.getIdSaldo(), conta.getTipoConta(), conta.getNomeConta(), conta.getSaldoConta(), conta.getDataDeposito()
+                    conta.getIdUsuario(),
+                    conta.getIdSaldo(),
+                    conta.getTipoConta(),
+                    conta.getNomeConta(),
+                    conta.getSaldoConta(),
+                    conta.getDataDeposito()
             }, Integer.class);
                 conta.setIdConta(IdConta);
 
