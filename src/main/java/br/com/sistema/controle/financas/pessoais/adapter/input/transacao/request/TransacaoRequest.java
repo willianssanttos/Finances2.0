@@ -10,11 +10,11 @@ import java.sql.Timestamp;
 @Builder(toBuilder = true)
 public class TransacaoRequest {
 
-    private Integer idSaldo;
     private Integer idConta;
-    private String Descricao;
-    private String Categoria;
-    private Double Valor;
+    private Integer idSaldo;
+    private String descricao;
+    private String categoria;
+    private Double valor;
     private Timestamp dataMovimentacao;
     private int tipo;
 }
