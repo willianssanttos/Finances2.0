@@ -55,26 +55,6 @@ public class TransacaoService implements ITransacao {
                 .dataMovimentacao(Timestamp.valueOf(LocalDateTime.now()))
                 .build();
     }
-//    public void registrarTransacao(Integer idConta, Integer idSaldo, String descricao, String categoria, Double valor, int tipo){
-//           try {
-//               if (tipo != 1 && tipo != 2){
-//                   logger.error(Constantes.tipoTransacao);
-//               }
-//
-//               TransacoesContaEntity novaTransacao = new TransacoesContaEntity();
-//               novaTransacao.setIdConta(idConta);
-//               novaTransacao.setIdSaldo(idSaldo);
-//               novaTransacao.setDescricao(descricao);
-//               novaTransacao.setCategoria(categoria);
-//               novaTransacao.setValor(valor);
-//               novaTransacao.setTipo(tipo);
-//               novaTransacao.setDataMovimentacao(Timestamp.valueOf(LocalDateTime.now()));
-//
-//               ITransacaoContaDao.inserirTransacao(novaTransacao);
-//           } catch (Exception e){
-//               logger.error(Constantes.ErrocadastroTransacao);
-//           }
-//    }
 
 //    public List<ExtratoEntity> obterExtratoPorMes(Integer idUsuario, int mes, int ano){
 //        try {
