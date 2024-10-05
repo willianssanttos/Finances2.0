@@ -8,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.sql.Timestamp;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -59,7 +59,7 @@ public class ContaService implements IConta {
         }
     }
 
-    public ContaResponse mapearConta(TipoContaEntity tipoConta, ContaEntity contaCriada){
+    private ContaResponse mapearConta(TipoContaEntity tipoConta, ContaEntity contaCriada){
         return ContaResponse.builder()
                 .nomeConta(contaCriada.getNomeConta())
                 .tipoConta(TipoContaEnum.valueOf(tipoConta.getNomeTipoConta()))

@@ -1,9 +1,6 @@
 package br.com.sistema.controle.financas.pessoais.adapter.input.transacao.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 

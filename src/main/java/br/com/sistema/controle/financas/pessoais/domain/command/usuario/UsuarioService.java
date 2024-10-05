@@ -11,7 +11,6 @@ import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoReposit
 import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.SaldoEntity;
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
-import br.com.sistema.controle.financas.pessoais.security.PasswordSecurity;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarEmail;
 import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarNumeroCelular;
@@ -27,9 +26,9 @@ import java.time.LocalDateTime;
 public class UsuarioService implements IUsuario {
 
     @Autowired
-    private IUsuarioRepository IUsuarioRepository;
+    private IUsuarioRepository iUsuarioRepository;
     @Autowired
-    private ISaldoRepository ISaldoRepository;
+    private ISaldoRepository iSaldoRepository;
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
     public UsuarioResponse criarUsuario(UsuarioRequest usuario) {
@@ -39,7 +38,7 @@ public class UsuarioService implements IUsuario {
             throw new EmailValidacaoException();
         }
 
-        Boolean emailExiste = IUsuarioRepository.verificarEmailExistente(usuario.getEmailUsuario());
+        Boolean emailExiste = iUsuarioRepository.verificarEmailExistente(usuario.getEmailUsuario());
         if (emailExiste != null && emailExiste){
             throw new EmailExistenteException();
         }
@@ -56,7 +55,7 @@ public class UsuarioService implements IUsuario {
                     .numeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()))
                     .build();
 
-            UsuarioEntity usuarioCriado =  IUsuarioRepository.criarUsuario(novoUsuario);
+            UsuarioEntity usuarioCriado =  iUsuarioRepository.criarUsuario(novoUsuario);
 
             SaldoEntity inserirSaldo = SaldoEntity.builder()
                     .idUsuario(usuarioCriado.getIdUsuario())
@@ -64,7 +63,7 @@ public class UsuarioService implements IUsuario {
                     .dataAtualizadaSaldo(Timestamp.valueOf(LocalDateTime.now()))
                     .build();
 
-            SaldoEntity saldoCriado = ISaldoRepository.inserirSaldo(inserirSaldo);
+            SaldoEntity saldoCriado = iSaldoRepository.inserirSaldo(inserirSaldo);
 
             return mapearUsuario(usuarioCriado);
         } catch (Exception e){
@@ -72,7 +71,7 @@ public class UsuarioService implements IUsuario {
             throw new CriarUsuarioException();
         }
     }
-    public UsuarioResponse mapearUsuario(UsuarioEntity usuarioCriado){
+    private UsuarioResponse mapearUsuario(UsuarioEntity usuarioCriado){
         return UsuarioResponse.builder()
                 .nomeUsuario(usuarioCriado.getNomeUsuario())
                 .emailUsuario(usuarioCriado.getEmailUsuario())

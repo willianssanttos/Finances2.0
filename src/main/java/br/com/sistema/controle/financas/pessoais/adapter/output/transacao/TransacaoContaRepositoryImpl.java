@@ -27,8 +27,8 @@ public class TransacaoContaRepositoryImpl implements ITransacaoContaRepository {
         try {
             String sql = "SELECT inserir_transacao(?,?,?,?,?,?,?)";
             Integer idTransacao = jdbcTemplate.queryForObject(sql, new Object[] {
-                    transacao.getIdSaldo(),
                     transacao.getIdConta(),
+                    transacao.getIdSaldo(),
                     transacao.getDescricao(),
                     transacao.getCategoria(),
                     transacao.getValor(),
