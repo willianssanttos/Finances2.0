@@ -3,6 +3,8 @@ package br.com.sistema.controle.financas.pessoais.domain.command.transacao;
 import br.com.sistema.controle.financas.pessoais.adapter.input.transacao.request.TransacaoRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.transacao.response.TransacaoResponse;
 import br.com.sistema.controle.financas.pessoais.domain.command.Enum.CategoriaEnum;
+import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ExtratoEntity;
+import br.com.sistema.controle.financas.pessoais.domain.exception.CarregarExtratoNotFoundException;
 import br.com.sistema.controle.financas.pessoais.domain.exception.CriarTransacaoException;
 import br.com.sistema.controle.financas.pessoais.port.input.transacao.ITransacao;
 import br.com.sistema.controle.financas.pessoais.port.output.transacao.ITransacaoContaRepository;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class TransacaoService implements ITransacao {
@@ -25,8 +28,8 @@ public class TransacaoService implements ITransacao {
 
 
     public TransacaoResponse registrarTransacao(TransacaoRequest transacao){
+        logger.info(Constantes.DebugRegistroProcesso);
         try {
-
             TransacoesContaEntity novaTransacao = TransacoesContaEntity.builder()
                     .idConta(transacao.getIdConta())
                     .idSaldo(transacao.getIdSaldo())
@@ -56,12 +59,13 @@ public class TransacaoService implements ITransacao {
                 .build();
     }
 
-//    public List<ExtratoEntity> obterExtratoPorMes(Integer idUsuario, int mes, int ano){
-//        try {
-//            return ITransacaoContaDao.obterExtratoPorMes(idUsuario, mes, ano);
-//        } catch (Exception e){
-//            logger.error(Constantes.ErrorRecuperarExtrato);
-//        }
-//        return obterExtratoPorMes(idUsuario, mes, ano);
-//    }
+    public List<ExtratoEntity> obterExtratoPorMes(Integer idUsuario, int mes, int ano){
+        logger.info(Constantes.DebugBuscarProcesso);
+        try {
+            return iTransacaoContaRepository.obterExtratoPorMes(idUsuario, mes, ano);
+        } catch (Exception e){
+            logger.error(Constantes.ErrorRecuperarExtrato);
+            throw new CarregarExtratoNotFoundException();
+        }
+    }
 }

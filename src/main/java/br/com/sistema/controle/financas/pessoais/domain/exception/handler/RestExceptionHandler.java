@@ -45,7 +45,8 @@ public class RestExceptionHandler {
 //    }
 
     @ExceptionHandler({
-            TipoContaNotFoundException.class
+            TipoContaNotFoundException.class,
+            CarregarExtratoNotFoundException.class
              })
     public ResponseEntity<ApiError> notFoundException(RuntimeException ex) {
         ApiError apiError = ApiError
@@ -59,8 +60,10 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler({
+            NomeValidacaoException.class,
             EmailValidacaoException.class,
-            NumeroCelularValidacaoException.class
+            SenhaValidacaoException.class,
+            NumeroCelularValidacaoException.class,
 
     })
     public ResponseEntity<ApiError> badRequetException(RuntimeException ex) {
