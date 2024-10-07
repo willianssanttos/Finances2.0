@@ -50,7 +50,7 @@ public class ContaService implements IConta {
                     .dataDeposito(Timestamp.valueOf(LocalDateTime.now()))
                     .build();
 
-        ContaEntity contaCriada = IContaRepository.criarConta(novaConta);
+            ContaEntity contaCriada = IContaRepository.criarConta(novaConta);
         return mapearConta(tipoConta,contaCriada);
 
         } catch (Exception e){
@@ -67,13 +67,6 @@ public class ContaService implements IConta {
                 .dataDeposito(contaCriada.getDataDeposito())
                 .build();
     }
-
-
-
-
-
-
-
 
 //    public void editarConta(ContaEntity conta){
 //        try {

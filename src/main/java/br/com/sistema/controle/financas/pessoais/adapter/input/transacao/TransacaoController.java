@@ -3,7 +3,7 @@ package br.com.sistema.controle.financas.pessoais.adapter.input.transacao;
 import br.com.sistema.controle.financas.pessoais.adapter.input.transacao.response.ExtratoTransacaoResponse;
 import br.com.sistema.controle.financas.pessoais.adapter.input.transacao.request.TransacaoRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.transacao.response.TransacaoResponse;
-import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ExtratoEntity;
+import br.com.sistema.controle.financas.pessoais.domain.entity.transacao.ExtratoTransacaoEntity;
 import br.com.sistema.controle.financas.pessoais.port.input.transacao.ITransacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class TransacaoController implements ITransacaoController{
             @PathVariable Integer idUsuario,
             @RequestParam Integer mes,
             @RequestParam Integer ano){
-        List<ExtratoEntity> extrato = iTransacao.obterExtratoPorMes(idUsuario, mes, ano);
+        List<ExtratoTransacaoEntity> extrato = iTransacao.obterExtratoPorMes(idUsuario, mes, ano);
         ExtratoTransacaoResponse response = ExtratoTransacaoResponse.converterExtrato(extrato);
         return ResponseEntity.ok(response);
     }
