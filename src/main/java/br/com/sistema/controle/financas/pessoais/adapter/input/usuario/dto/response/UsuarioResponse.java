@@ -2,12 +2,12 @@ package br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.resp
 
 import lombok.*;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsuarioResponse {
 
-    private Integer idUsuario;
     private String nomeUsuario;
     private String emailUsuario;
     private String senhaUsuario;

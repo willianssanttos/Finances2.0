@@ -1,23 +1,17 @@
-//package br.com.sistema.controle.financas.pessoais.domain.entity.conta;
-//
-//public class TipoContaEntity {
-//
-//    private Integer idTipoConta;
-//    private String nomeTipoConta;
-//
-//    public Integer getIdTipoConta() {
-//        return idTipoConta;
-//    }
-//
-//    public void setIdTipoConta(Integer idTipoConta) {
-//        this.idTipoConta = idTipoConta;
-//    }
-//
-//    public String getNomeTipoConta() {
-//        return nomeTipoConta;
-//    }
-//
-//    public void setNomeTipoConta(String nomeTipoConta) {
-//        this.nomeTipoConta = nomeTipoConta;
-//    }
-//}
+package br.com.sistema.controle.financas.pessoais.domain.entity.conta;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder = true)
+public class TipoContaEntity {
+
+    private Integer idTipoConta;
+    private String nomeTipoConta;
+
+}

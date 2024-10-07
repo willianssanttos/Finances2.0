@@ -4,6 +4,5 @@ import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.reque
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
 
 public interface IUsuario {
-
     UsuarioResponse criarUsuario(UsuarioRequest usuario);
 }

@@ -1,48 +1,80 @@
-//package br.com.sistema.controle.financas.pessoais.domain.command.conta;
-//
-//import br.com.sistema.controle.financas.pessoais.port.output.conta.IContaDao;
-//import br.com.sistema.controle.financas.pessoais.adapter.output.conta.ContaDaoImpl;
-//import br.com.sistema.controle.financas.pessoais.adapter.output.conta.SaldoDaoImpl;
-//import br.com.sistema.controle.financas.pessoais.adapter.output.conta.TipoContaImpl;
-//import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoDao;
-//import br.com.sistema.controle.financas.pessoais.port.output.conta.ITipoContaDao;
-//import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
-//import br.com.sistema.controle.financas.pessoais.utils.Constantes;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//
-//import java.util.List;
-//
-//public class ContaService {
-//
-//    private static final Logger logger = LoggerFactory.getLogger(ContaService.class);
-//    private IContaDao IContaDao;
-//    private ISaldoDao ISaldoDao;
-//    private ITipoContaDao ITipoContaDao;
-//    public ContaService(){
-//        this.IContaDao = new ContaDaoImpl();
-//        this.ISaldoDao = new SaldoDaoImpl();
-//        this.ITipoContaDao = new TipoContaImpl();
-//    }
-//
-//    public ContaEntity criarConta(ContaEntity conta){
-//        try {
-//            return IContaDao.criarConta(conta);
-//        } catch (Exception e){
-//            logger.error(Constantes.ErroCadastroConta);
-//        }
-//        return conta;
-//    }
-//
-//    public List<String> obterTodosTiposConta() {
-//        try {
-//            return ITipoContaDao.obterTiposConta();
-//        } catch (Exception e){
-//            logger.error(Constantes.cadastroTipoConta);
-//        }
-//        return obterTodosTiposConta();
-//    }
-//
+package br.com.sistema.controle.financas.pessoais.domain.command.conta;
+
+import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.request.ContaRequest;
+import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response.ContaResponse;
+import br.com.sistema.controle.financas.pessoais.domain.command.Enum.TipoContaEnum;
+import br.com.sistema.controle.financas.pessoais.domain.entity.conta.TipoContaEntity;
+import br.com.sistema.controle.financas.pessoais.domain.exception.CriarContaException;
+import br.com.sistema.controle.financas.pessoais.domain.exception.TipoContaNotFoundException;
+import br.com.sistema.controle.financas.pessoais.port.input.conta.IConta;
+import br.com.sistema.controle.financas.pessoais.port.output.conta.IContaRepository;
+import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
+import br.com.sistema.controle.financas.pessoais.port.output.conta.ITipoContaRepository;
+import br.com.sistema.controle.financas.pessoais.utils.Constantes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+@Service
+public class ContaService implements IConta {
+
+    @Autowired
+    private IContaRepository IContaRepository;
+
+    @Autowired
+    private ITipoContaRepository iTipoContaRepository;
+
+//    @Autowired
+//    private ISaldoRepository ISaldoRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(ContaService.class);
+    public ContaResponse criarConta(ContaRequest conta){
+        logger.info(Constantes.DebugRegistroProcesso);
+
+        TipoContaEntity tipoConta = iTipoContaRepository.obterTiposConta(conta.getTipoConta().name());
+        if (tipoConta == null){
+            throw new TipoContaNotFoundException();
+        }
+
+        try {
+            ContaEntity novaConta = ContaEntity.builder()
+                    .idUsuario(conta.getIdUsuario())
+                    .idSaldo(conta.getIdSaldo())
+                    .nomeConta(conta.getNomeConta())
+                    .saldoConta(conta.getSaldoConta())
+                    .tipoConta(tipoConta.getNomeTipoConta())
+                    .dataDeposito(Timestamp.valueOf(LocalDateTime.now()))
+                    .build();
+
+        ContaEntity contaCriada = IContaRepository.criarConta(novaConta);
+        return mapearConta(tipoConta,contaCriada);
+
+        } catch (Exception e){
+            logger.error(Constantes.ErroRegistrarNoServidor);
+           throw new CriarContaException();
+        }
+    }
+
+    private ContaResponse mapearConta(TipoContaEntity tipoConta, ContaEntity contaCriada){
+        return ContaResponse.builder()
+                .nomeConta(contaCriada.getNomeConta())
+                .tipoConta(TipoContaEnum.valueOf(tipoConta.getNomeTipoConta()))
+                .saldoConta(contaCriada.getSaldoConta())
+                .dataDeposito(contaCriada.getDataDeposito())
+                .build();
+    }
+
+
+
+
+
+
+
+
 //    public void editarConta(ContaEntity conta){
 //        try {
 //            IContaDao.editarConta(conta);
@@ -76,4 +108,4 @@
 //        }
 //        return obterContasPorIdUsuario(idUsuario);
 //    }
-//}
+}

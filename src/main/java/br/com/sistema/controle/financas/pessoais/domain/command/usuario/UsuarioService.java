@@ -2,14 +2,17 @@ package br.com.sistema.controle.financas.pessoais.domain.command.usuario;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.request.UsuarioRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
+import br.com.sistema.controle.financas.pessoais.domain.exception.*;
 import br.com.sistema.controle.financas.pessoais.port.input.usuario.IUsuario;
-import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoDao;
-import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioDao;
+import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
+import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.SaldoEntity;
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
-import br.com.sistema.controle.financas.pessoais.security.PasswordSecurity;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
+import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarEmail;
+import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarNome;
 import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarNumeroCelular;
+import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarSenha;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,64 +23,74 @@ import java.time.LocalDateTime;
 
 @Service
 public class UsuarioService implements IUsuario {
-
     @Autowired
-    private IUsuarioDao IUsuarioDao;
+    private IUsuarioRepository iUsuarioRepository;
     @Autowired
-    private ISaldoDao ISaldoDao;
+    private ISaldoRepository iSaldoRepository;
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
-
     public UsuarioResponse criarUsuario(UsuarioRequest usuario) {
+        logger.info(Constantes.DebugRegistroProcesso);
 
-        if (!ValidarNumeroCelular.validarNumeroCelular(usuario.getNumeroCelular())) {
-            logger.error(Constantes.cadastroCelular);
-        }
+        validarDados(usuario);
 
         try {
+            UsuarioEntity novoUsuario = UsuarioEntity.builder()
+                    .nomeUsuario(usuario.getNomeUsuario())
+                    .emailUsuario(usuario.getEmailUsuario())
+                    .senhaUsuario(usuario.getSenhaUsuario())
+                    .numeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()))
+                    .build();
 
-            UsuarioEntity novoUsuario = new UsuarioEntity();
-            novoUsuario.setNomeUsuario(usuario.getNomeUsuario());
-            novoUsuario.setEmailUsuario(usuario.getEmailUsuario());
-            novoUsuario.setSenhaUsuario(PasswordSecurity.encriptarSenha(usuario.getSenhaUsuario()));
-            novoUsuario.setNumeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()));
-            UsuarioEntity usuarioCriado =  IUsuarioDao.criarUsuario(novoUsuario);
+            UsuarioEntity usuarioCriado =  iUsuarioRepository.criarUsuario(novoUsuario);
 
-            if (usuarioCriado.getIdUsuario() != null) {
-                SaldoEntity inserirSaldo = new SaldoEntity();
-                inserirSaldo.setIdUsuario(novoUsuario.getIdUsuario());
-                inserirSaldo.setSaldoAtual(0.00);
-                inserirSaldo.setDataAtualizadaSaldo(Timestamp.valueOf(LocalDateTime.now()));
+            SaldoEntity inserirSaldo = SaldoEntity.builder()
+                    .idUsuario(usuarioCriado.getIdUsuario())
+                    .saldoAtual(0.00)
+                    .dataAtualizadaSaldo(Timestamp.valueOf(LocalDateTime.now()))
+                    .build();
 
-                ISaldoDao.inserirSaldo(inserirSaldo);
-            }
-            return new UsuarioResponse(usuarioCriado.getIdUsuario(), usuarioCriado.getNomeUsuario(), usuarioCriado.getEmailUsuario(), usuarioCriado.getSenhaUsuario(), usuarioCriado.getNumeroCelular());
+            SaldoEntity saldoCriado = iSaldoRepository.inserirSaldo(inserirSaldo);
+
+            return mapearUsuario(usuarioCriado);
         } catch (Exception e){
-            logger.error(Constantes.ErroCadastroUsuario, e);
+            logger.error(Constantes.ErroRegistrarNoServidor);
+            throw new CriarUsuarioException();
         }
-        return new UsuarioResponse();
+    }
+    private UsuarioResponse mapearUsuario(UsuarioEntity usuarioCriado){
+        return UsuarioResponse.builder()
+                .nomeUsuario(usuarioCriado.getNomeUsuario())
+                .emailUsuario(usuarioCriado.getEmailUsuario())
+                .senhaUsuario(usuarioCriado.getSenhaUsuario())
+                .numeroCelular(usuarioCriado.getNumeroCelular())
+                .build();
     }
 
-//    public Boolean emailExiste(String email) {
-//        try {
-//            return IUsuarioDao.verificarEmailExistente(email);
-//        } catch (Exception e) {
-//            logger.error(Constantes.ErroVerificarEmail, e);
-//        }
-//        return emailExiste(email);
-//    }
-//
-//    public UsuarioEntity autenticarUsuario(String email, String senha) {
-//        try {
-//            UsuarioEntity usuario = IUsuarioDao.validarLogin(email);
-//            boolean senhaValida = PasswordSecurity.checkSenha(senha, usuario.getSenhaUsuario());
-//
-//            if (!senhaValida){
-//                return null;
-//            }
-//        } catch (Exception e){
-//            logger.error(Constantes.erroLoginConta, e);
-//        }
-//        return autenticarUsuario(email,senha);
-//    }
+    private void validarDados(UsuarioRequest usuario){
+
+        if (!ValidarNome.validarNome(usuario.getNomeUsuario())){
+            throw new NomeValidacaoException();
+        }
+
+        if(!ValidarEmail.validaEmail(usuario.getEmailUsuario())){
+            throw new EmailValidacaoException();
+        }
+
+        Boolean emailExiste = iUsuarioRepository.verificarEmailExistente(usuario.getEmailUsuario());
+        if (emailExiste != null && emailExiste){
+            throw new EmailExistenteException();
+        }
+
+        if (!ValidarSenha.validarSenha(usuario.getSenhaUsuario())){
+            throw new SenhaValidacaoException();
+        }
+
+        if (!ValidarNumeroCelular.validarNumeroCelular(usuario.getNumeroCelular())) {
+            throw new NumeroCelularValidacaoException();
+        }
+
+    }
+
+
 }
