@@ -4,6 +4,7 @@ import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.request
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response.ContaResponse;
 import br.com.sistema.controle.financas.pessoais.domain.command.Enum.TipoContaEnum;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.TipoContaEntity;
+import br.com.sistema.controle.financas.pessoais.domain.exception.AtualizarContaException;
 import br.com.sistema.controle.financas.pessoais.domain.exception.CriarContaException;
 import br.com.sistema.controle.financas.pessoais.domain.exception.TipoContaNotFoundException;
 import br.com.sistema.controle.financas.pessoais.port.input.conta.IConta;
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
 public class ContaService implements IConta {
 
     @Autowired
-    private IContaRepository IContaRepository;
+    private IContaRepository iContaRepository;
 
     @Autowired
     private ITipoContaRepository iTipoContaRepository;
@@ -50,7 +51,7 @@ public class ContaService implements IConta {
                     .dataDeposito(Timestamp.valueOf(LocalDateTime.now()))
                     .build();
 
-            ContaEntity contaCriada = IContaRepository.criarConta(novaConta);
+            ContaEntity contaCriada = iContaRepository.criarConta(novaConta);
         return mapearConta(tipoConta,contaCriada);
 
         } catch (Exception e){
@@ -68,13 +69,15 @@ public class ContaService implements IConta {
                 .build();
     }
 
-//    public void editarConta(ContaEntity conta){
-//        try {
-//            IContaDao.editarConta(conta);
-//        } catch (Exception e){
-//            logger.error(Constantes.ErroEditar);
-//        }
-//    }
+    public ContaRequest editarConta(ContaRequest conta){
+        try {
+            iContaRepository.editarConta(conta);
+        } catch (Exception e){
+            logger.error(Constantes.ErroEditar);
+            throw new AtualizarContaException();
+        }
+        return conta;
+    }
 //
 //    public void excluirConta(Integer idConta){
 //        try {

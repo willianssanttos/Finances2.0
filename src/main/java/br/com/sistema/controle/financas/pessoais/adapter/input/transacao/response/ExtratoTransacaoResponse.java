@@ -35,7 +35,6 @@ public class ExtratoTransacaoResponse{
         double totalGastos = 0;
 
         for (ExtratoTransacaoEntity extrato : extratos) {
-            Double valor = extrato.getValor() != null ? extrato.getValor() : 0.0;
             if ("Ganho".equals(extrato.getTipoTransacao())) {
                 totalGanhos += extrato.getValor();
                 ganhosPorCategoria.merge(extrato.getCategoria(), extrato.getValor(), Double::sum);
