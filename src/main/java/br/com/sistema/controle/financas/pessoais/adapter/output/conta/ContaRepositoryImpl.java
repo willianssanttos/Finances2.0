@@ -41,7 +41,7 @@ public class ContaRepositoryImpl implements IContaRepository {
             conta.setIdConta(IdConta);
 
         } catch (DataAccessException e){
-            logger.error(Constantes.ErroRegistrarNoServidor);
+            logger.error(Constantes.ErroRegistrarNoServidor, e.getMessage());
             throw new CriarContaException();
         }
         return conta;
@@ -49,25 +49,18 @@ public class ContaRepositoryImpl implements IContaRepository {
 
     @Override
     @Transactional
-    public ContaRequest editarConta(ContaRequest conta){
+    public void editarConta(ContaRequest conta) {
         logger.info(Constantes.DebugEditarProcesso);
 
+        String sql = "SELECT atualizar_conta(?, ?, ?)";
         try {
-            String sql = "SELECT atualizar_conta(?,?,?)";
-            jdbcTemplate.execute(sql, (PreparedStatementCallback<Object>) ps ->{
-                ps.setInt(1, conta.getIdConta());
-                ps.setString(2, conta.getNomeConta());
-                ps.setString(3, String.valueOf(conta.getTipoConta()));
-                ps.execute();
-                return conta;
-            });
-
-        } catch (DataAccessException e){
-           logger.error(Constantes.ErroEditarRegistroNoServidor);
-           throw new AtualizarContaException();
+            jdbcTemplate.query(sql, new Object[]{conta.getIdConta(), conta.getNomeConta(), String.valueOf(conta.getTipoConta())}, rs -> {});
+        } catch (DataAccessException e) {
+            logger.error(Constantes.ErroEditarRegistroNoServidor, e.getMessage());
+            throw new AtualizarContaException();
         }
-        return conta;
     }
+
 //
 //    public void excluirConta(Integer idConta){
 //        logger.debug(Constantes.DebugDeletarProcesso + idConta);

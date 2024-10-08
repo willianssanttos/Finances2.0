@@ -25,7 +25,6 @@ public class ContaService implements IConta {
 
     @Autowired
     private IContaRepository iContaRepository;
-
     @Autowired
     private ITipoContaRepository iTipoContaRepository;
 
@@ -55,7 +54,7 @@ public class ContaService implements IConta {
         return mapearConta(tipoConta,contaCriada);
 
         } catch (Exception e){
-            logger.error(Constantes.ErroRegistrarNoServidor);
+            logger.error(Constantes.ErroRegistrarNoServidor, e.getMessage());
            throw new CriarContaException();
         }
     }
@@ -69,14 +68,13 @@ public class ContaService implements IConta {
                 .build();
     }
 
-    public ContaRequest editarConta(ContaRequest conta){
+    public void editarConta(ContaRequest conta){
         try {
             iContaRepository.editarConta(conta);
         } catch (Exception e){
-            logger.error(Constantes.ErroEditar);
+            logger.error(Constantes.ErroEditar, e.getMessage());
             throw new AtualizarContaException();
         }
-        return conta;
     }
 //
 //    public void excluirConta(Integer idConta){
