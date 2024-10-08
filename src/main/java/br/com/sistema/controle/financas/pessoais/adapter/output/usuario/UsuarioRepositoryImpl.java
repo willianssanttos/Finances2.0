@@ -25,6 +25,7 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
     @Transactional
     public UsuarioEntity criarUsuario(UsuarioEntity usuario){
         logger.info(Constantes.DebugRegistroProcesso);
+
         try {
             String sql = "SELECT inserir_usuario(?,?,?,?)";
             Integer IdUsuario = jdbcTemplate.queryForObject(sql, new Object[]{
@@ -34,8 +35,10 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
                     usuario.getNumeroCelular()
             },Integer.class);
             usuario.setIdUsuario(IdUsuario);
+            logger.info(Constantes.InfoRegistrar);
+
         } catch (DataAccessException e){
-            logger.error(Constantes.ErroRegistrarNoServidor);
+            logger.error(Constantes.ErroRegistrarNoServidor, e.getMessage());
             throw new CriarUsuarioException();
         }
         return usuario;
@@ -45,11 +48,13 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
     @Transactional
     public boolean verificarEmailExistente(String email) {
         logger.info(Constantes.DebugBuscarProcesso);
-        String sql = "SELECT verificar_email_existente(?)";
+
         try{
-        return jdbcTemplate.queryForObject(sql, Boolean.class, email);
+            String sql = "SELECT verificar_email_existente(?)";
+            return jdbcTemplate.queryForObject(sql, Boolean.class, email);
+
         } catch (DataAccessException e) {
-            logger.error(Constantes.ErroBuscarRegistroNoServidor);
+            logger.error(Constantes.ErroBuscarRegistroNoServidor, e.getMessage());
             throw new EmailExistenteException();
         }
     }

@@ -5,6 +5,6 @@ import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 public class CriarTransacaoException extends RuntimeException{
 
     public CriarTransacaoException(){
-        super(Constantes.ErrocadastroTransacao);
+        super(Constantes.ErroCadastroTransacao);
     }
 }

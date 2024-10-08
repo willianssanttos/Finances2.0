@@ -43,7 +43,7 @@ public class TransacaoService implements ITransacao {
 
             return mapearTransacao(realizarTransacao);
         } catch (Exception e){
-            logger.error(Constantes.ErrocadastroTransacao);
+            logger.error(Constantes.ErroCadastroTransacao);
             throw new CriarTransacaoException();
         }
     }

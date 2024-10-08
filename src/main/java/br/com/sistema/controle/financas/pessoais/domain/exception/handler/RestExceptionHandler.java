@@ -19,6 +19,8 @@ public class RestExceptionHandler {
             Exception.class,
             CriarUsuarioException.class,
             CriarContaException.class,
+            CriaSaldoException.class,
+            DeletarContaException.class,
             CriarTransacaoException.class
     })
     public ResponseEntity<ApiError> genericException(Exception ex) {
@@ -46,7 +48,10 @@ public class RestExceptionHandler {
 
     @ExceptionHandler({
             TipoContaNotFoundException.class,
-            CarregarExtratoNotFoundException.class
+            ObterSaldoNotFoundException.class,
+            ObterContasNotFoundException.class,
+            CarregarExtratoNotFoundException.class,
+
              })
     public ResponseEntity<ApiError> notFoundException(RuntimeException ex) {
         ApiError apiError = ApiError

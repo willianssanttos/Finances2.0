@@ -35,5 +35,4 @@ public class TransacaoController implements ITransacaoController{
         ExtratoTransacaoResponse response = ExtratoTransacaoResponse.converterExtrato(extrato);
         return ResponseEntity.ok(response);
     }
-
 }
