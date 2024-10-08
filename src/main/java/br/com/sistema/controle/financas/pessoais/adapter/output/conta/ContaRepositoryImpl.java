@@ -41,7 +41,7 @@ public class ContaRepositoryImpl implements IContaRepository {
             conta.setIdConta(IdConta);
 
         } catch (DataAccessException e){
-            logger.error(Constantes.ErroRegistrarNoServidor, e.getMessage());
+            logger.error(Constantes.ErroRegistrarNoServidor, e.getMessage(), e);
             throw new CriarContaException();
         }
         return conta;
@@ -56,7 +56,7 @@ public class ContaRepositoryImpl implements IContaRepository {
         try {
             jdbcTemplate.query(sql, new Object[]{conta.getIdConta(), conta.getNomeConta(), String.valueOf(conta.getTipoConta())}, rs -> {});
         } catch (DataAccessException e) {
-            logger.error(Constantes.ErroEditarRegistroNoServidor, e.getMessage());
+            logger.error(Constantes.ErroEditarRegistroNoServidor, e.getMessage(), e);
             throw new AtualizarContaException();
         }
     }
@@ -68,15 +68,9 @@ public class ContaRepositoryImpl implements IContaRepository {
 
         try {
             String sql = "SELECT excluir_conta(?)";
-
-            jdbcTemplate.execute(sql, (PreparedStatementCallback<Void>) ps -> {
-                ps.setInt(1, idConta);
-                ps.execute();
-                return null;
-            });
-
+            jdbcTemplate.update(sql, idConta);
         } catch (DataAccessException e){
-            logger.error(Constantes.ErroDeletarRegistroNoServidor, e.getMessage());
+            logger.error(Constantes.ErroDeletarRegistroNoServidor, e.getMessage(), e);
         }
     }
 }
