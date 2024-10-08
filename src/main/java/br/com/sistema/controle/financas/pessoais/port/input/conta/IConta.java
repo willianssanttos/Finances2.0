@@ -7,4 +7,5 @@ public interface IConta {
 
     ContaResponse criarConta(ContaRequest conta);
     void editarConta(ContaRequest conta);
+    void excluirConta(Integer idConta);
 }

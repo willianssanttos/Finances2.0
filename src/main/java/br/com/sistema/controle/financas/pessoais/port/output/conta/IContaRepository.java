@@ -9,7 +9,6 @@ public interface IContaRepository {
     void editarConta(ContaRequest conta);
 
 //    List<ContaEntity> obterContasPorUsuario(Integer idUsuario);
-//
-//    void excluirConta(Integer idConta);
+     void excluirConta(Integer idConta);
 
 }

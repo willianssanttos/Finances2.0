@@ -76,14 +76,14 @@ public class ContaService implements IConta {
             throw new AtualizarContaException();
         }
     }
-//
-//    public void excluirConta(Integer idConta){
-//        try {
-//            IContaDao.excluirConta(idConta);
-//        } catch (Exception e){
-//            logger.error(Constantes.ErroExcluir);
-//        }
-//    }
+
+    public void excluirConta(Integer idConta){
+        try {
+            iContaRepository.excluirConta(idConta);
+        } catch (Exception e){
+            logger.error(Constantes.ErroExcluir);
+        }
+    }
 //
 //    public Double obterSaldo(Integer idUsuario){
 //        try {

@@ -27,4 +27,10 @@ public class ContaController implements IContaController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @DeleteMapping("/deletar-conta/{idConta}")
+    public ResponseEntity<Void> deletarConta(@PathVariable Integer idConta){
+        iConta.excluirConta(idConta);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }

@@ -61,22 +61,23 @@ public class ContaRepositoryImpl implements IContaRepository {
         }
     }
 
-//
-//    public void excluirConta(Integer idConta){
-//        logger.debug(Constantes.DebugDeletarProcesso + idConta);
-//
-//        String sql = "SELECT excluir_conta(?)";
-//
-//        try (Connection conn = DataSourceConfig.getConexao();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setInt(1, idConta);
-//            ps.executeQuery();
-//
-//            logger.info(Constantes.InfoDeletar + idConta);
-//        } catch (SQLException e){
-//            logger.error(Constantes.ErroDeletarRegistroNoServidor);
-//        }
-//    }
+    @Override
+    @Transactional
+    public void excluirConta(Integer idConta){
+        logger.info(Constantes.DebugDeletarProcesso);
+
+        try {
+            String sql = "SELECT excluir_conta(?)";
+
+            jdbcTemplate.execute(sql, (PreparedStatementCallback<Void>) ps -> {
+                ps.setInt(1, idConta);
+                ps.execute();
+                return null;
+            });
+
+        } catch (DataAccessException e){
+            logger.error(Constantes.ErroDeletarRegistroNoServidor, e.getMessage());
+        }
+    }
 }
 
