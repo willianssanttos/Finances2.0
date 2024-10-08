@@ -1,7 +1,6 @@
 package br.com.sistema.controle.financas.pessoais.domain.entity.transacao;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

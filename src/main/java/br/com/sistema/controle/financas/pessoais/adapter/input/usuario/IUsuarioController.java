@@ -16,6 +16,4 @@ public interface IUsuarioController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor ao realizar cadastro!")
     })
     ResponseEntity criaUsuario(@RequestBody UsuarioRequest usuario);
-
-
 }

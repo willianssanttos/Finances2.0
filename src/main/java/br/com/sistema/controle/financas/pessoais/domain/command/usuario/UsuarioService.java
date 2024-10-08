@@ -89,6 +89,5 @@ public class UsuarioService implements IUsuario {
         if (!ValidarNumeroCelular.validarNumeroCelular(usuario.getNumeroCelular())) {
             throw new NumeroCelularValidacaoException();
         }
-
     }
 }

@@ -27,8 +27,9 @@ public class TipoContaRepositoryImpl implements ITipoContaRepository {
         try {
             String sql = "SELECT * FROM buscar_tipo_conta_por_nome(?)";
             return jdbcTemplate.queryForObject(sql, new Object[] { nomeTipoConta }, new TipoContaRowMapper());
+
         } catch (DataAccessException e){
-            logger.error(Constantes.ErroBuscarRegistroNoServidor);
+            logger.error(Constantes.ErroBuscarRegistroNoServidor, e.getMessage());
            throw new TipoContaNotFoundException();
         }
     }

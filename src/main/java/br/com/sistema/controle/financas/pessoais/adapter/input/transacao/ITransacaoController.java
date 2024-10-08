@@ -25,5 +25,4 @@ public interface ITransacaoController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor ao listar transações!")
     })
     ResponseEntity<ExtratoTransacaoResponse> extratoTransacao(Integer idUsuario, Integer mes, Integer ano);
-
 }

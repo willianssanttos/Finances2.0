@@ -40,9 +40,10 @@ public class TransacaoContaRepositoryImpl implements ITransacaoContaRepository {
                     transacao.getTipo()
             }, Integer.class);
             transacao.setIdTransacao(idTransacao);
+            logger.info(Constantes.InfoRegistrar);
 
         } catch (DataAccessException e){
-            logger.error(Constantes.ErroRegistrarNoServidor);
+            logger.error(Constantes.ErroRegistrarNoServidor, e.getMessage());
             throw new CriarTransacaoException();
         }
         return transacao;

@@ -2,14 +2,14 @@ package br.com.sistema.controle.financas.pessoais.domain.command.conta;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.request.ContaRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response.ContaResponse;
+import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response.ObterContasUsuarioResponse;
 import br.com.sistema.controle.financas.pessoais.domain.command.Enum.TipoContaEnum;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.TipoContaEntity;
-import br.com.sistema.controle.financas.pessoais.domain.exception.AtualizarContaException;
-import br.com.sistema.controle.financas.pessoais.domain.exception.CriarContaException;
-import br.com.sistema.controle.financas.pessoais.domain.exception.TipoContaNotFoundException;
+import br.com.sistema.controle.financas.pessoais.domain.exception.*;
 import br.com.sistema.controle.financas.pessoais.port.input.conta.IConta;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.IContaRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
+import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ITipoContaRepository;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 import org.slf4j.Logger;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ContaService implements IConta {
@@ -27,9 +28,8 @@ public class ContaService implements IConta {
     private IContaRepository iContaRepository;
     @Autowired
     private ITipoContaRepository iTipoContaRepository;
-
-//    @Autowired
-//    private ISaldoRepository ISaldoRepository;
+    @Autowired
+    private ISaldoRepository iSaldoRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ContaService.class);
     public ContaResponse criarConta(ContaRequest conta){
@@ -68,7 +68,21 @@ public class ContaService implements IConta {
                 .build();
     }
 
+    public ObterContasUsuarioResponse obterContasUsuario(Integer idUsario){
+        logger.info(Constantes.DebugBuscarProcesso);
+        try {
+            Double saldo = iSaldoRepository.obterSaldoPorIdUsuario(idUsario);
+            List<ContaEntity> contas = iContaRepository.obterContasPorUsuario(idUsario);
+            return new ObterContasUsuarioResponse(saldo, contas);
+
+        } catch (Exception e){
+            logger.error(Constantes.ErrorRecuperarContas, e.getMessage());
+            throw new ObterContasNotFoundException();
+        }
+    }
+
     public void editarConta(ContaRequest conta){
+        logger.info(Constantes.DebugEditarProcesso);
         try {
             iContaRepository.editarConta(conta);
         } catch (Exception e){
@@ -78,28 +92,12 @@ public class ContaService implements IConta {
     }
 
     public void excluirConta(Integer idConta){
+        logger.info(Constantes.DebugDeletarProcesso);
         try {
             iContaRepository.excluirConta(idConta);
         } catch (Exception e){
-            logger.error(Constantes.ErroExcluir);
+            logger.error(Constantes.ErroExcluir, e.getMessage());
+            throw new DeletarContaException();
         }
     }
-//
-//    public Double obterSaldo(Integer idUsuario){
-//        try {
-//            return ISaldoDao.obterSaldoPorIdUsuario(idUsuario);
-//        } catch (Exception e){
-//            logger.error(Constantes.ErrorRecuperarSaldo);
-//        }
-//        return obterSaldo(idUsuario);
-//    }
-//
-//    public List<ContaEntity> obterContasPorIdUsuario(Integer idUsuario){
-//        try {
-//            return IContaDao.obterContasPorUsuario(idUsuario);
-//        } catch (Exception e){
-//           logger.error(Constantes.ErrorRecuperarContas);
-//        }
-//        return obterContasPorIdUsuario(idUsuario);
-//    }
 }
