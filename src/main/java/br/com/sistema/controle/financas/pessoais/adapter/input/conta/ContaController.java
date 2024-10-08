@@ -21,8 +21,16 @@ public class ContaController implements IContaController {
     }
 
     @PutMapping("/atualizar-conta/{idConta}")
-    public ResponseEntity atualizarConta(@PathVariable Integer idConta, @RequestBody ContaRequest conta){
-        return ResponseEntity.status(HttpStatus.OK).body(iConta.editarConta(conta));
-
+    public ResponseEntity<Void> atualizarConta(@PathVariable Integer idConta, @RequestBody ContaRequest conta) {
+        conta.setIdConta(idConta);
+        iConta.editarConta(conta);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @DeleteMapping("/deletar-conta/{idConta}")
+    public ResponseEntity<Void> deletarConta(@PathVariable Integer idConta){
+        iConta.excluirConta(idConta);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }
