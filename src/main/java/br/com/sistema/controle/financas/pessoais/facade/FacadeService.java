@@ -2,7 +2,7 @@
 //
 //import br.com.sistema.controle.financas.pessoais.domain.exception.ServiceException;
 //import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
-//import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ExtratoEntity;
+//import br.com.sistema.controle.financas.pessoais.domain.entity.transacao.ExtratoEntity;
 //import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
 //import br.com.sistema.controle.financas.pessoais.domain.command.conta.ContaService;
 //import br.com.sistema.controle.financas.pessoais.domain.command.conta.TransacaoService;

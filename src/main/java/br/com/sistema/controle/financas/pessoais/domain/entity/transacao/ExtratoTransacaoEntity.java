@@ -1,4 +1,4 @@
-package br.com.sistema.controle.financas.pessoais.domain.entity.conta;
+package br.com.sistema.controle.financas.pessoais.domain.entity.transacao;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,15 +11,14 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class ExtratoEntity {
+public class ExtratoTransacaoEntity {
 
     private String nomeConta;
+    private String tipoConta;
     private String descricao;
     private String categoria;
     private Double valor;
     private Timestamp dataMovimentacao;
     private String tipoTransacao;
-    private String tipoConta;
-
+    
 }

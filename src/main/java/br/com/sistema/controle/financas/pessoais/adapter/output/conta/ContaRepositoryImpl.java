@@ -1,5 +1,7 @@
 package br.com.sistema.controle.financas.pessoais.adapter.output.conta;
 
+import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.request.ContaRequest;
+import br.com.sistema.controle.financas.pessoais.domain.exception.AtualizarContaException;
 import br.com.sistema.controle.financas.pessoais.domain.exception.CriarContaException;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.IContaRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
@@ -10,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,78 +41,37 @@ public class ContaRepositoryImpl implements IContaRepository {
             conta.setIdConta(IdConta);
 
         } catch (DataAccessException e){
-            logger.error(Constantes.ErroRegistrarNoServidor);
+            logger.error(Constantes.ErroRegistrarNoServidor, e.getMessage(), e);
             throw new CriarContaException();
         }
         return conta;
     }
 
-//    public List<ContaEntity> obterContasPorUsuario(Integer idUsuario) {
-//        logger.debug(Constantes.DebugBuscarProcesso + idUsuario);
-//
-//        String sql = "SELECT * FROM buscar_contas_por_usuario(?)";
-//        List<ContaEntity> contas = new ArrayList<>();
-//
-//        try (Connection conn = DataSourceConfig.getConexao();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setInt(1, idUsuario);
-//            ResultSet rs = ps.executeQuery();
-//
-//            while (rs.next()) {
-//                ContaEntity conta = new ContaEntity();
-//                conta.setIdConta(rs.getInt("nr_id_conta"));
-//                conta.setIdSaldo(rs.getInt("fk_nr_id_saldo"));
-//                conta.setTipoConta(rs.getString("nm_tipo_conta"));
-//                conta.setNomeConta(rs.getString("nm_nome"));
-//                conta.setSaldoConta(rs.getDouble("ds_saldo"));
-//                conta.setDataDeposito(Timestamp.valueOf(rs.getTimestamp("ds_data_deposito").toLocalDateTime()));
-//                contas.add(conta);
-//            }
-//            rs.close();
-//
-//            logger.info(Constantes.InfoBuscar + idUsuario);
-//        } catch (SQLException e) {
-//            logger.error(Constantes.ErroBuscarRegistroNoServidor);
-//        }
-//        return contas;
-//    }
-//
-//    public void editarConta(ContaEntity conta){
-//        logger.debug(Constantes.DebugEditarProcesso + conta);
-//
-//        String sql = "SELECT atualizar_conta(?,?,?)";
-//
-//        try (Connection conn = DataSourceConfig.getConexao();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setInt(1, conta.getIdConta());
-//            ps.setString(2, conta.getNomeConta());
-//            ps.setString(3, conta.getTipoConta());
-//
-//            ps.execute();
-//
-//            logger.info(Constantes.InfoEditar + conta);
-//        } catch (SQLException e){
-//           logger.error(Constantes.ErroEditarRegistroNoServidor);
-//        }
-//    }
-//
-//    public void excluirConta(Integer idConta){
-//        logger.debug(Constantes.DebugDeletarProcesso + idConta);
-//
-//        String sql = "SELECT excluir_conta(?)";
-//
-//        try (Connection conn = DataSourceConfig.getConexao();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setInt(1, idConta);
-//            ps.executeQuery();
-//
-//            logger.info(Constantes.InfoDeletar + idConta);
-//        } catch (SQLException e){
-//            logger.error(Constantes.ErroDeletarRegistroNoServidor);
-//        }
-//    }
+    @Override
+    @Transactional
+    public void editarConta(ContaRequest conta) {
+        logger.info(Constantes.DebugEditarProcesso);
+
+        String sql = "SELECT atualizar_conta(?, ?, ?)";
+        try {
+            jdbcTemplate.query(sql, new Object[]{conta.getIdConta(), conta.getNomeConta(), String.valueOf(conta.getTipoConta())}, rs -> {});
+        } catch (DataAccessException e) {
+            logger.error(Constantes.ErroEditarRegistroNoServidor, e.getMessage(), e);
+            throw new AtualizarContaException();
+        }
+    }
+
+    @Override
+    @Transactional
+    public void excluirConta(Integer idConta){
+        logger.info(Constantes.DebugDeletarProcesso);
+
+        try {
+            String sql = "SELECT excluir_conta(?)";
+            jdbcTemplate.update(sql, idConta);
+        } catch (DataAccessException e){
+            logger.error(Constantes.ErroDeletarRegistroNoServidor, e.getMessage(), e);
+        }
+    }
 }
 

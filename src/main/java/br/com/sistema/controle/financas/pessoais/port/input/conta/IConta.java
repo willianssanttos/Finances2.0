@@ -6,4 +6,6 @@ import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.respons
 public interface IConta {
 
     ContaResponse criarConta(ContaRequest conta);
+    void editarConta(ContaRequest conta);
+    void excluirConta(Integer idConta);
 }

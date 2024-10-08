@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @SuperBuilder(toBuilder = true)
 public class ContaRequest extends SaldoRequest {
 
+    private Integer idConta;
     private String nomeConta;
     private Double saldoConta;
     private TipoContaEnum tipoConta;
