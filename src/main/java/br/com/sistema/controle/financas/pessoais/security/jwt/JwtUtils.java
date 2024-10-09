@@ -1,5 +1,6 @@
 package br.com.sistema.controle.financas.pessoais.security.jwt;
 
+import br.com.sistema.controle.financas.pessoais.domain.command.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

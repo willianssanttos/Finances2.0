@@ -1,5 +1,6 @@
 package br.com.sistema.controle.financas.pessoais.security;
 
+import br.com.sistema.controle.financas.pessoais.adapter.output.usuario.UserDetailsRepositoryImpl;
 import br.com.sistema.controle.financas.pessoais.security.jwt.AuthEntryPointJwt;
 import br.com.sistema.controle.financas.pessoais.security.jwt.AuthFilterToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    UserDetailsRepositoryImpl userDetailsService;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
