@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class UsuarioRequest extends SaldoRequest {
 
+    private String nomeRole;
     private String nomeUsuario;
     private String emailUsuario;
     private String senhaUsuario;

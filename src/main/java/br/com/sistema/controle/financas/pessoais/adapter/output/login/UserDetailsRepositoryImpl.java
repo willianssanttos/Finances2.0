@@ -1,4 +1,4 @@
-package br.com.sistema.controle.financas.pessoais.adapter.output.usuario;
+package br.com.sistema.controle.financas.pessoais.adapter.output.login;
 
 import br.com.sistema.controle.financas.pessoais.domain.command.security.UserDetailsImpl;
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;

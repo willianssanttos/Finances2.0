@@ -2,9 +2,12 @@ package br.com.sistema.controle.financas.pessoais.domain.command.usuario;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.request.UsuarioRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
+import br.com.sistema.controle.financas.pessoais.domain.command.Enum.RolesEnum;
+import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.RolesEntity;
 import br.com.sistema.controle.financas.pessoais.domain.exception.*;
 import br.com.sistema.controle.financas.pessoais.port.input.usuario.IUsuario;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
+import br.com.sistema.controle.financas.pessoais.port.output.login.ILogin;
 import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.SaldoEntity;
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
@@ -24,6 +27,9 @@ import java.time.LocalDateTime;
 
 @Service
 public class UsuarioService implements IUsuario {
+
+    @Autowired
+    private ILogin iLogin;
     @Autowired
     private IUsuarioRepository iUsuarioRepository;
     @Autowired
@@ -41,6 +47,7 @@ public class UsuarioService implements IUsuario {
 
         try {
             UsuarioEntity novoUsuario = UsuarioEntity.builder()
+                    .nomeRole(RolesEnum.CLIENTE)
                     .nomeUsuario(usuario.getNomeUsuario())
                     .emailUsuario(usuario.getEmailUsuario())
                     .senhaUsuario(encodedPassword)

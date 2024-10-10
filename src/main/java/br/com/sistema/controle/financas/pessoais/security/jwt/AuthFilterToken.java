@@ -1,6 +1,6 @@
 package br.com.sistema.controle.financas.pessoais.security.jwt;
 
-import br.com.sistema.controle.financas.pessoais.adapter.output.usuario.UserDetailsRepositoryImpl;
+import br.com.sistema.controle.financas.pessoais.adapter.output.login.UserDetailsRepositoryImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

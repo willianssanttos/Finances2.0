@@ -1,10 +1,23 @@
+
+-- Tabela Roles
+CREATE TABLE Roles (
+    nr_id_roles SERIAL PRIMARY KEY,
+    nm_roles VARCHAR(255) NOT NULL
+);
+
+INSERT INTO Roles (nm_roles) VALUES ('CLIENTE');
+INSERT INTO Roles (nm_roles) VALUES ('MODERADOR');
+INSERT INTO Roles (nm_roles) VALUES ('ADMINISTRADOR');
+
 -- Tabela de Usuários
 CREATE TABLE Usuarios (
     nr_id_usuario SERIAL PRIMARY KEY,
+    fk_nr_id_roles INT NOT NULL,
     nm_nome VARCHAR(255) NOT NULL,
     ds_email VARCHAR(255) NOT NULL UNIQUE,
     ds_senha VARCHAR(255) NOT null,
-    ds_telefone VARCHAR(255)
+    ds_telefone VARCHAR(255),
+    FOREIGN KEY (fk_nr_id_roles) REFERENCES Roles(nr_id_roles)
 );
 
 -- Tabela de Saldo
@@ -54,3 +67,4 @@ CREATE TABLE Transacoes (
     tipo INT NOT NULL CHECK (tipo IN (1, 2)),
     FOREIGN KEY (fk_nr_id_conta) REFERENCES Contas(nr_id_conta)
 );
+
