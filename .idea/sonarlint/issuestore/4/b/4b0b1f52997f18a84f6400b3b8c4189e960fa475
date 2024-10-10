@@ -1,0 +1,8 @@
+
+r	java:S117%"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ЃжЎд€€€€€8Л№ьш¶2
+X
+java:S1874%"6Remove this use of "queryForObject"; it is deprecated.(ЃжЎд€€€€€8’Ёьш¶2
+O
+java:S1874>"-Remove this use of "query"; it is deprecated.(£УµЏ€€€€€8жЁьш¶2
+J
+java:S1874M"-Remove this use of "query"; it is deprecated.(НЉРЪ8тЁьш¶2
