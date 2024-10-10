@@ -30,8 +30,8 @@ public class TransacaoService implements ITransacao {
              logger.info(Constantes.DebugRegistroProcesso);
         try {
             TransacoesContaEntity novaTransacao = TransacoesContaEntity.builder()
-                    .idConta(transacao.getIdConta())
                     .idSaldo(transacao.getIdSaldo())
+                    .idConta(transacao.getIdConta())
                     .Descricao(transacao.getDescricao())
                     .Categoria(String.valueOf(CategoriaEnum.valueOf(transacao.getCategoria())))
                     .Valor(transacao.getValor())

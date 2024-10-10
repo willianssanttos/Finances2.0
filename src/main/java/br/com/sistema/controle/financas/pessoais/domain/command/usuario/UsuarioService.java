@@ -16,6 +16,7 @@ import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarSenha;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -27,18 +28,22 @@ public class UsuarioService implements IUsuario {
     private IUsuarioRepository iUsuarioRepository;
     @Autowired
     private ISaldoRepository iSaldoRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
     public UsuarioResponse criarUsuario(UsuarioRequest usuario) {
         logger.info(Constantes.DebugRegistroProcesso);
 
         validarDados(usuario);
+        String encodedPassword = passwordEncoder.encode(usuario.getSenhaUsuario());
 
         try {
             UsuarioEntity novoUsuario = UsuarioEntity.builder()
                     .nomeUsuario(usuario.getNomeUsuario())
                     .emailUsuario(usuario.getEmailUsuario())
-                    .senhaUsuario(usuario.getSenhaUsuario())
+                    .senhaUsuario(encodedPassword)
                     .numeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()))
                     .build();
 
