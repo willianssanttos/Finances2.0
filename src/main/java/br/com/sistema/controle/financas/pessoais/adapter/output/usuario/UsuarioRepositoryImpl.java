@@ -27,9 +27,9 @@ public class UsuarioRepositoryImpl implements IUsuarioRepository {
         logger.info(Constantes.DebugRegistroProcesso);
 
         try {
-            String sql = "SELECT inserir_usuario(?,?,?,?)";
+            String sql = "SELECT inserir_usuario(?,?,?,?,?)";
             Integer IdUsuario = jdbcTemplate.queryForObject(sql, new Object[]{
-                    usuario.getNomeRole(),
+                    usuario.getNomeRole().name(),
                     usuario.getNomeUsuario(),
                     usuario.getEmailUsuario(),
                     usuario.getSenhaUsuario(),

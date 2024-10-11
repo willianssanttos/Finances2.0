@@ -54,7 +54,7 @@ public class UsuarioService implements IUsuario {
                     .numeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()))
                     .build();
 
-            UsuarioEntity usuarioCriado =  iUsuarioRepository.criarUsuario(novoUsuario);
+            UsuarioEntity usuarioCriado = iUsuarioRepository.criarUsuario(novoUsuario);
 
             SaldoEntity inserirSaldo = SaldoEntity.builder()
                     .idUsuario(usuarioCriado.getIdUsuario())
