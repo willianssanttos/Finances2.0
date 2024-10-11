@@ -1,5 +1,6 @@
-package br.com.sistema.controle.financas.pessoais.domain.entity.usuario;
+package br.com.sistema.controle.financas.pessoais.domain.entity.login;
 
+import br.com.sistema.controle.financas.pessoais.domain.command.Enum.RolesEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class RolesEntity {
 
     private Integer idRole;
-    private String nomeRole;
+    private RolesEnum nomeRole;
 }

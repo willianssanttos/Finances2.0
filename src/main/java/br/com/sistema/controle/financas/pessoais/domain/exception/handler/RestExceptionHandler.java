@@ -47,6 +47,8 @@ public class RestExceptionHandler {
 //    }
 
     @ExceptionHandler({
+            RoleNotFoundException.class,
+            ObterLoginNotFoundException.class,
             TipoContaNotFoundException.class,
             ObterSaldoNotFoundException.class,
             ObterContasNotFoundException.class,

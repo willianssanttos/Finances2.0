@@ -52,9 +52,14 @@ public class Constantes {
 
 ///Login ////
 
-    public static final String loginConta = "Login realizado com sucesso!";
+    public static final String Token = "Token inválido ou expirado!";
+
+    public static final String ErroRole = "Erro role não localizada no servidor!";
     public static final String erroLoginConta = "Usuário ou senha incorretos!";
-    public static final String tipoTransacao = "Tipo transação invalido! Valores permitidos. Use 1 para receitas ou 2 para despesas!";
+    public static final String GerarToken = "Erro ao gerar token.";
+    public static final String GToken = "Token ausente.";
+
+
     public static final String cadastroTransacao = "Transação registrada com sucesso!";
     public static final String ErroCadastroTransacao = "Erro ao realizar registro transação!";
     public static final String ErrorRecuperarSaldo = "Erro ao recuperar o id do usuario, para obter o saldo!";

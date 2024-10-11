@@ -3,11 +3,11 @@ package br.com.sistema.controle.financas.pessoais.domain.command.usuario;
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.request.UsuarioRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
 import br.com.sistema.controle.financas.pessoais.domain.command.Enum.RolesEnum;
-import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.RolesEntity;
+import br.com.sistema.controle.financas.pessoais.domain.command.security.config.SecurityConfiguration;
 import br.com.sistema.controle.financas.pessoais.domain.exception.*;
 import br.com.sistema.controle.financas.pessoais.port.input.usuario.IUsuario;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
-import br.com.sistema.controle.financas.pessoais.port.output.login.ILogin;
+import br.com.sistema.controle.financas.pessoais.port.output.login.ILoginRepository;
 import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.SaldoEntity;
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
@@ -19,7 +19,6 @@ import br.com.sistema.controle.financas.pessoais.utils.validacoes.ValidarSenha;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -29,28 +28,27 @@ import java.time.LocalDateTime;
 public class UsuarioService implements IUsuario {
 
     @Autowired
-    private ILogin iLogin;
+    private ILoginRepository iLoginRepository;
     @Autowired
     private IUsuarioRepository iUsuarioRepository;
     @Autowired
     private ISaldoRepository iSaldoRepository;
-
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private SecurityConfiguration securityConfiguration;
+
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
     public UsuarioResponse criarUsuario(UsuarioRequest usuario) {
         logger.info(Constantes.DebugRegistroProcesso);
 
         validarDados(usuario);
-        String encodedPassword = passwordEncoder.encode(usuario.getSenhaUsuario());
 
         try {
             UsuarioEntity novoUsuario = UsuarioEntity.builder()
                     .nomeRole(RolesEnum.CLIENTE)
                     .nomeUsuario(usuario.getNomeUsuario())
                     .emailUsuario(usuario.getEmailUsuario())
-                    .senhaUsuario(encodedPassword)
+                    .senhaUsuario(securityConfiguration.passwordEncoder().encode(usuario.getSenhaUsuario()))
                     .numeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()))
                     .build();
 
