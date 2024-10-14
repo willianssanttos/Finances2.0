@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 
 @Service
 public class UsuarioService implements IUsuario {
-
     @Autowired
     private ILoginRepository iLoginRepository;
     @Autowired
@@ -45,12 +44,13 @@ public class UsuarioService implements IUsuario {
 
         try {
             UsuarioEntity novoUsuario = UsuarioEntity.builder()
-                    .nomeRole(RolesEnum.CLIENTE)
+                    .role(String.valueOf(RolesEnum.ROLE_CLIENTE))
                     .nomeUsuario(usuario.getNomeUsuario())
                     .emailUsuario(usuario.getEmailUsuario())
                     .senhaUsuario(securityConfiguration.passwordEncoder().encode(usuario.getSenhaUsuario()))
                     .numeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()))
                     .build();
+
 
             UsuarioEntity usuarioCriado = iUsuarioRepository.criarUsuario(novoUsuario);
 
@@ -100,4 +100,5 @@ public class UsuarioService implements IUsuario {
             throw new NumeroCelularValidacaoException();
         }
     }
+
 }

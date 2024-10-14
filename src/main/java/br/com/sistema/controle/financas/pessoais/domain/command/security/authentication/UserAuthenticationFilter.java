@@ -39,9 +39,10 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
+            String token = recoveryToken(request); // Recupera o token do cabeçalho Authorization da requisição
+
             // Verifica se o endpoint requer autenticação antes de processar a requisição
             if (checkIfEndpointIsNotPublic(request)) {
-                String token = recoveryToken(request); // Recupera o token do cabeçalho Authorization da requisição
                 if (token != null) {
                     String subject = jwtTokenService.getSubjectFromToken(token); // Obtém o assunto (neste caso, o nome de usuário) do token
                     UsuarioEntity login = iLoginRepository.obterLogin(subject); // Busca o usuário pelo email (que é o assunto do token)
@@ -79,7 +80,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     // Verifica se o endpoint requer autenticação antes de processar a requisição
     private boolean checkIfEndpointIsNotPublic(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        return !Arrays.asList(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).contains(requestURI);
+        return !Arrays.asList(SecurityConfiguration.ENDPOINTS_COM_AUTENTICACAO_NAO_OBRIGATORIA).contains(requestURI);
     }
 
     // Constroi e envia uma resposta de erro JSON em caso de exceção
@@ -101,5 +102,4 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
         objectMapper.findAndRegisterModules();
         return objectMapper.writeValueAsString(object);
     }
-
 }

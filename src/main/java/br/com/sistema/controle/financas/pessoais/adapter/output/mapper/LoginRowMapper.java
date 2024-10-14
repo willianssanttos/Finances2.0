@@ -1,6 +1,7 @@
 package br.com.sistema.controle.financas.pessoais.adapter.output.mapper;
 
 import br.com.sistema.controle.financas.pessoais.domain.command.Enum.RolesEnum;
+import br.com.sistema.controle.financas.pessoais.domain.entity.login.RolesEntity;
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -14,7 +15,10 @@ public class LoginRowMapper implements RowMapper<UsuarioEntity> {
         login.setIdUsuario(rs.getInt(1));
         login.setEmailUsuario(rs.getString(2));
         login.setSenhaUsuario(rs.getString(3));
-        login.setNomeRole(RolesEnum.valueOf(rs.getString(4)));
+        // Cria um objeto RolesEntity e adiciona na lista nomeRole
+        RolesEntity role = new RolesEntity();
+        role.setNomeRole(RolesEnum.valueOf(rs.getString(4)));
+        login.getNomeRole().add(role);
         return login;
     }
 }

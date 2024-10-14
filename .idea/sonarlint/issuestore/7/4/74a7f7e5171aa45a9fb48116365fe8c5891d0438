@@ -1,5 +1,9 @@
 
 a
-java:S18545"?Remove this useless assignment to local variable "saldoCriado".(”˜²×øÿÿÿÿ8÷¼›ß¦2
+java:S1854A"?Remove this useless assignment to local variable "saldoCriado".(”˜²×øÿÿÿÿ8ÄÇú˜¨2
 R
-java:S14815"0Remove this unused "saldoCriado" local variable.(”˜²×øÿÿÿÿ8ý¼›ß¦2
+java:S1481A"0Remove this unused "saldoCriado" local variable.(”˜²×øÿÿÿÿ8ÊÇú˜¨2
+M
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8ÑÇú˜¨2
+N
+java:S1144j",Remove this unused private "getRole" method.(„ƒÀñùÿÿÿÿ8ÑÇú˜¨2

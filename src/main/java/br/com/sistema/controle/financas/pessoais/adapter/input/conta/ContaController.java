@@ -33,9 +33,10 @@ public class ContaController implements IContaController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("obter-contas/{idUsuario}")
-    public ResponseEntity<ObterContasUsuarioResponse> obterContas(@PathVariable Integer idUsuario){
-        ObterContasUsuarioResponse response = iConta.obterContasUsuario(idUsuario);
+    @GetMapping("/obter-contas/{idUsuario}")
+    public ResponseEntity<ObterContasUsuarioResponse> obterContas(@RequestHeader("Authorization") String token,
+                                                                  @PathVariable Integer idUsuario){
+        ObterContasUsuarioResponse response = iConta.obterContasUsuario(token, idUsuario);
         return ResponseEntity.ok(response);
     }
 

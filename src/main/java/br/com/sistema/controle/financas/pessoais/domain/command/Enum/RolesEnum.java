@@ -2,7 +2,16 @@ package br.com.sistema.controle.financas.pessoais.domain.command.Enum;
 
 public enum RolesEnum {
 
-    CLIENTE,
-    MODERADOR,
-    ADMINISTRADOR
+    ROLE_CLIENTE("ROLE_CLIENTE"),
+    ROLE_MODERADOR("ROLE_MODERADOR"),
+    ROLE_ADMINISTRADOR("ROLE_ADMINISTRADOR");
+
+    private String RolesEnum;
+    RolesEnum(String rolesEnum) {
+        RolesEnum = rolesEnum;
+    }
+
+    public String getRolesEnum() {
+        return RolesEnum;
+    }
 }

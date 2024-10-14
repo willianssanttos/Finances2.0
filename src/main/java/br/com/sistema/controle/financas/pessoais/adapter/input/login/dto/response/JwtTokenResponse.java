@@ -1,4 +1,4 @@
-package br.com.sistema.controle.financas.pessoais.adapter.input.auth.dto.response;
+package br.com.sistema.controle.financas.pessoais.adapter.input.login.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

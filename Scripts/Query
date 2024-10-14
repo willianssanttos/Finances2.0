@@ -5,19 +5,18 @@ CREATE TABLE Roles (
     nm_roles VARCHAR(255) NOT NULL
 );
 
-INSERT INTO Roles (nm_roles) VALUES ('CLIENTE');
-INSERT INTO Roles (nm_roles) VALUES ('MODERADOR');
-INSERT INTO Roles (nm_roles) VALUES ('ADMINISTRADOR');
+INSERT INTO Roles (nm_roles) VALUES ('ROLE_CLIENTE');
+INSERT INTO Roles (nm_roles) VALUES ('ROLE_MODERADOR');
+INSERT INTO Roles (nm_roles) VALUES ('ROLE_ADMINISTRADOR');
 
 -- Tabela de Usuários
 CREATE TABLE Usuarios (
     nr_id_usuario SERIAL PRIMARY KEY,
-    fk_nr_id_roles INT NOT NULL,
+    nm_roles VARCHAR(255) NOT null,
     nm_nome VARCHAR(255) NOT NULL,
     ds_email VARCHAR(255) NOT NULL UNIQUE,
     ds_senha VARCHAR(255) NOT null,
-    ds_telefone VARCHAR(255),
-    FOREIGN KEY (fk_nr_id_roles) REFERENCES Roles(nr_id_roles)
+    ds_telefone VARCHAR(255)
 );
 
 -- Tabela de Saldo
@@ -36,7 +35,7 @@ CREATE TABLE tipo_conta (
 );
 
 INSERT INTO tipo_conta (nm_tipo_conta) VALUES ('CORRENTE');
-INSERT INTO tipo_conta (nm_tipo_conta) VALUES ('POUPANÇA');
+INSERT INTO tipo_conta (nm_tipo_conta) VALUES ('POUPANCA');
 INSERT INTO tipo_conta (nm_tipo_conta) VALUES ('INVESTIMENTO');
 INSERT INTO tipo_conta (nm_tipo_conta) VALUES ('BENEFICIOS');
 INSERT INTO tipo_conta (nm_tipo_conta) VALUES ('OUTROS');
@@ -67,4 +66,3 @@ CREATE TABLE Transacoes (
     tipo INT NOT NULL CHECK (tipo IN (1, 2)),
     FOREIGN KEY (fk_nr_id_conta) REFERENCES Contas(nr_id_conta)
 );
-

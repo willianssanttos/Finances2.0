@@ -1,7 +1,6 @@
 package br.com.sistema.controle.financas.pessoais.adapter.output.login;
 
 import br.com.sistema.controle.financas.pessoais.adapter.output.mapper.LoginRowMapper;
-import br.com.sistema.controle.financas.pessoais.adapter.output.mapper.RolesRowMapper;
 import br.com.sistema.controle.financas.pessoais.domain.entity.login.RolesEntity;
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
 import br.com.sistema.controle.financas.pessoais.domain.exception.ObterLoginNotFoundException;
@@ -27,7 +26,7 @@ public class LoginRepositoryImpl implements ILoginRepository {
     @Override
     @Transactional
     public UsuarioEntity obterLogin(String email){
-        logger.info(Constantes.DebugRegistroProcesso);
+        logger.info(Constantes.DebugBuscarProcesso);
         try {
             String sql = "SELECT * FROM validar_login(?)";
             return jdbcTemplate.queryForObject(sql, new Object[] { email }, new LoginRowMapper());
@@ -35,20 +34,6 @@ public class LoginRepositoryImpl implements ILoginRepository {
         } catch (DataAccessException e){
             logger.error(Constantes.ErroBuscarRegistroNoServidor, e.getMessage());
             throw new ObterLoginNotFoundException();
-        }
-    }
-
-    @Override
-    @Transactional
-    public RolesEntity obterRole(String nomeRole){
-        logger.info(Constantes.DebugRegistroProcesso);
-        try {
-            String sql = "SELECT * FROM buscar_roles(?)";
-            return jdbcTemplate.queryForObject(sql, new Object[] { nomeRole }, new RolesRowMapper());
-
-        } catch (DataAccessException e){
-            logger.error(Constantes.ErroBuscarRegistroNoServidor, e.getMessage());
-            throw new RoleNotFoundException();
         }
     }
 }

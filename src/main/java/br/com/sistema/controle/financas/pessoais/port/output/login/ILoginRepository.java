@@ -5,8 +5,5 @@ import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEn
 
 
 public interface ILoginRepository {
-
-    RolesEntity obterRole(String nomeRole);
-
     UsuarioEntity obterLogin(String email);
 }

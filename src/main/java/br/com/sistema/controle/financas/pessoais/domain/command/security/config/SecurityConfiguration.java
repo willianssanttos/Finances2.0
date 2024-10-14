@@ -22,69 +22,46 @@ public class SecurityConfiguration {
     @Autowired
     private UserAuthenticationFilter userAuthenticationFilter;
 
-    private static final String ROLE_ADMINISTRATOR = "ADMINISTRADOR";
-
-    public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
+    public static final String [] ENDPOINTS_COM_AUTENTICACAO_NAO_OBRIGATORIA = {
             "/v1/login/usuario",
-            "/v1/usuario/criar-usuario"
+            "/v1/usuario/criar-usuario",
+            "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui/index.html**"
     };
 
-    public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED_TO_GET_STATUS = {
-            "/products",
-            "/products/{productId}",
-            "/products/category/{categoryName}",
-            "/products/search",
-            "/orders",
-            "/orders/{orderId}",
-            "/orders/status/{statusName}"
+    public static final String [] ENDPOINTS_COM_AUTENTICACAO_NECESSARIA_PARA_LISTAR = {
+            "/v1/conta",
+            "/v1/conta/obter-contas/{idUsuario}",
+            "/v1/transacao",
+            "v1/transacao/extrato-transacao/{idUsuario}"
     };
 
-    private static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED_TO_POST_STATUS = {
-            "/orders"
+    private static final String [] ENDPOINTS_COM_AUTENTICACAO_NECESSARIO_PARA_CRIAR = {
+            "/v1/conta",
+            "/v1/conta/criar-conta",
+            "/v1/conta/atualizar-conta/{idConta}",
+            "/v1/transacao",
+            "/v1/transacao/criar-transacao",
     };
 
-    private static final String [] ENDPOINTS_AVAILABLE_FOR_ADMIN_ONLY_TO_GET_STATUS = {
-            "/users",
-            "/users/{userId}"
+    private static final String [] ENDPOINTS_COM_AUTENTICACAO_NECESSARIO_PARA_DELETAR = {
+            "/v1/conta",
+            "/v1/conta/deletar-conta/{idConta}"
     };
-
-    private static final String [] ENDPOINTS_AVAILABLE_FOR_ADMIN_ONLY_TO_POST_STATUS = {
-            "/products",
-            "/products/{productId}/variation"
-    };
-
-    private static final String [] ENDPOINTS_AVAILABLE_FOR_ADMIN_ONLY_TO_PUT_STATUS = {
-            "/{productId}/variation/{productVariationId}"
-    };
-
-    private static final String [] ENDPOINTS_AVAILABLE_FOR_ADMIN_ONLY_TO_PATCH_STATUS = {
-            "/products/{productId}",
-            "/orders/{orderId}/status"
-    };
-
-    private static final String [] ENDPOINTS_AVAILABLE_FOR_ADMIN_ONLY_TO_DELETE_STATUS = {
-            "/users/{userId}",
-            "/products/{productId}",
-            "/products/{productId}/variation/{productVariationId}",
-            "/orders/{productId}"
-    };
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf().disable() // Desativa a proteção contra CSRF
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configura a política de criação de sessão como stateless
-                .and().authorizeHttpRequests() // Habilita a autorização para as requisições HTTP
-                .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
-                .requestMatchers(HttpMethod.GET, ENDPOINTS_WITH_AUTHENTICATION_REQUIRED_TO_GET_STATUS).authenticated()
-                .requestMatchers(HttpMethod.POST, ENDPOINTS_WITH_AUTHENTICATION_REQUIRED_TO_POST_STATUS).authenticated()
-                .requestMatchers(HttpMethod.GET, ENDPOINTS_AVAILABLE_FOR_ADMIN_ONLY_TO_GET_STATUS).hasAnyRole(ROLE_ADMINISTRATOR)
-                .requestMatchers(HttpMethod.POST, ENDPOINTS_AVAILABLE_FOR_ADMIN_ONLY_TO_POST_STATUS).hasAnyRole(ROLE_ADMINISTRATOR)
-                .requestMatchers(HttpMethod.PUT, ENDPOINTS_AVAILABLE_FOR_ADMIN_ONLY_TO_PUT_STATUS).hasAnyRole(ROLE_ADMINISTRATOR)
-                .requestMatchers(HttpMethod.PATCH, ENDPOINTS_AVAILABLE_FOR_ADMIN_ONLY_TO_PATCH_STATUS).hasAnyRole(ROLE_ADMINISTRATOR)
-                .requestMatchers(HttpMethod.DELETE, ENDPOINTS_AVAILABLE_FOR_ADMIN_ONLY_TO_DELETE_STATUS).hasAnyRole(ROLE_ADMINISTRATOR)
-                .anyRequest().denyAll()
+        return httpSecurity
+                .csrf(csrf -> csrf.disable()) // Desativa a proteção contra CSRF
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))// Configura a política de criação de sessão como stateless
+                .authorizeHttpRequests(authorize -> authorize // Habilita a autorização para as requisições HTTP
+                .requestMatchers(ENDPOINTS_COM_AUTENTICACAO_NAO_OBRIGATORIA).permitAll()
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui/index.html**").permitAll()
+                .requestMatchers(HttpMethod.GET, ENDPOINTS_COM_AUTENTICACAO_NECESSARIA_PARA_LISTAR).hasAuthority("ROLE_CLIENTE")
+                .requestMatchers(HttpMethod.POST, ENDPOINTS_COM_AUTENTICACAO_NECESSARIO_PARA_CRIAR).hasAuthority("ROLE_CLIENTE")
+                .requestMatchers(HttpMethod.DELETE, ENDPOINTS_COM_AUTENTICACAO_NECESSARIO_PARA_DELETAR).hasAuthority("ROLE_CLIENTE")
+                .anyRequest().authenticated()
+                )
                 // Adiciona o filtro de autenticação de usuário que criamos antes do filtro de segurança padrão do Spring Security
-                .and().addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

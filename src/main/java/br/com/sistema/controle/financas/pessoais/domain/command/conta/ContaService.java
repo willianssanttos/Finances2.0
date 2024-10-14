@@ -13,6 +13,7 @@ import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ITipoContaRepository;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
+import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,8 @@ public class ContaService implements IConta {
                 .build();
     }
 
-    public ObterContasUsuarioResponse obterContasUsuario(Integer idUsario){
+    public ObterContasUsuarioResponse obterContasUsuario(String token, Integer idUsario){
+
         logger.info(Constantes.DebugBuscarProcesso);
         try {
             Double saldo = iSaldoRepository.obterSaldoPorIdUsuario(idUsario);
