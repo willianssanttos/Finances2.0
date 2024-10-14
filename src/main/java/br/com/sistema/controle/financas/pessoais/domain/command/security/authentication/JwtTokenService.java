@@ -24,11 +24,11 @@ public class JwtTokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             String token = JWT.create()
-                    .withIssuer(EMISSOR) // Define o emissor do token
+                    .withIssuer(EMISSOR)
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(Instant.now().plus(4, ChronoUnit.HOURS))
                     .withSubject(login.getUsername())
-                    .sign(algorithm);// Assina o token usando o algoritmo especificado
+                    .sign(algorithm);
             return token;
         } catch (JWTCreationException exception){
             throw new JWTCreationException(Constantes.GerarToken, exception);
@@ -37,13 +37,13 @@ public class JwtTokenService {
 
     public String getSubjectFromToken(String token) {
         try {
-            // Define o algoritmo HMAC SHA256 para verificar a assinatura do token passando a chave secreta definida
+
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             return JWT.require(algorithm)
-                    .withIssuer(EMISSOR) // Define o emissor do token
+                    .withIssuer(EMISSOR)
                     .build()
-                    .verify(token) // Verifica a validade do token
-                    .getSubject(); // Obtém o assunto (neste caso, o nome de usuário) do token
+                    .verify(token)
+                    .getSubject();
         } catch (JWTVerificationException exception){
             throw new JWTVerificationException(Constantes.Token);
         }

@@ -39,26 +39,24 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            String token = recoveryToken(request); // Recupera o token do cabeçalho Authorization da requisição
+            String token = recoveryToken(request);
 
-            // Verifica se o endpoint requer autenticação antes de processar a requisição
+
             if (checkIfEndpointIsNotPublic(request)) {
                 if (token != null) {
-                    String subject = jwtTokenService.getSubjectFromToken(token); // Obtém o assunto (neste caso, o nome de usuário) do token
-                    UsuarioEntity login = iLoginRepository.obterLogin(subject); // Busca o usuário pelo email (que é o assunto do token)
-                    UserDetailsImpl userDetails = new UserDetailsImpl(login); // Cria um UserDetails com o usuário encontrado
+                    String subject = jwtTokenService.getSubjectFromToken(token);
+                    UsuarioEntity login = iLoginRepository.obterLogin(subject);
+                    UserDetailsImpl userDetails = new UserDetailsImpl(login);
 
-                    // Cria um objeto de autenticação do Spring Security
                     Authentication authentication =
                             new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
 
-                    // Define o objeto de autenticação no contexto de segurança do Spring Security
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {
                     throw new TokenException();
                 }
             }
-            filterChain.doFilter(request, response); // Continua o processamento da requisição
+            filterChain.doFilter(request, response);
         } catch (TokenException ex) {
             buidErrorResponse(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.name(), ex, response);
         } catch (JWTCreationException ex) {
@@ -68,7 +66,6 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    // Recupera o token do cabeçalho Authorization da requisição
     private String recoveryToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null) {
@@ -77,13 +74,11 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    // Verifica se o endpoint requer autenticação antes de processar a requisição
     private boolean checkIfEndpointIsNotPublic(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         return !Arrays.asList(SecurityConfiguration.ENDPOINTS_COM_AUTENTICACAO_NAO_OBRIGATORIA).contains(requestURI);
     }
 
-    // Constroi e envia uma resposta de erro JSON em caso de exceção
     private void buidErrorResponse(Integer codeError, String statusError, Exception ex, HttpServletResponse response) throws IOException {
         ApiError apiError = ApiError.builder()
                 .timestamp(LocalDateTime.now())
@@ -96,7 +91,6 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
         response.getWriter().write(convertObjToJson(apiError));
     }
 
-    // Converte um objeto Java em formato JSON
     private String convertObjToJson(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
