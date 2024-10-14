@@ -54,7 +54,6 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))// Configura a política de criação de sessão como stateless
                 .authorizeHttpRequests(authorize -> authorize // Habilita a autorização para as requisições HTTP
                 .requestMatchers(ENDPOINTS_COM_AUTENTICACAO_NAO_OBRIGATORIA).permitAll()
-                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui/index.html**").permitAll()
                 .requestMatchers(HttpMethod.GET, ENDPOINTS_COM_AUTENTICACAO_NECESSARIA_PARA_LISTAR).hasAuthority("ROLE_CLIENTE")
                 .requestMatchers(HttpMethod.POST, ENDPOINTS_COM_AUTENTICACAO_NECESSARIO_PARA_CRIAR).hasAuthority("ROLE_CLIENTE")
                 .requestMatchers(HttpMethod.DELETE, ENDPOINTS_COM_AUTENTICACAO_NECESSARIO_PARA_DELETAR).hasAuthority("ROLE_CLIENTE")

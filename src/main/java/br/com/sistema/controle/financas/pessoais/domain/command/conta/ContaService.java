@@ -45,6 +45,7 @@ public class ContaService implements IConta {
 
         try {
             ContaEntity novaConta = ContaEntity.builder()
+
                     .idUsuario(conta.getIdUsuario())
                     .idSaldo(conta.getIdSaldo())
                     .nomeConta(conta.getNomeConta())

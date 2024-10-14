@@ -71,7 +71,7 @@ public class Constantes {
     public static final String contaNaoEncontrada = "Nenhuma conta encontrada para o usuário!";
     public static final String criarConta = "Cadastre uma conta, e começe acompanhar sua vida financeira!";
     public static final String cadastroNomeConta = "Insira o nome da conta";
-    public static final String cadastroTipoConta = "Tipo contas invalido! Valores permitidos: CORRENTE\", \"POUPANÇA\", \"INVESTIMENTO, \"BENEFICIOS, \"OUTROS";
+    public static final String cadastroTipoConta = "Tipo contas invalido! Valores permitidos: CORRENTE\", \"POUPANCA\", \"INVESTIMENTO, \"BENEFICIOS, \"OUTROS";
     public static final String cadastroSaldo = "O valor invalido!";
     public static final String cadastroConta = "Conta adicionada com sucesso!";
 
