@@ -72,7 +72,6 @@ public class UsuarioService implements IUsuario {
         return UsuarioResponse.builder()
                 .nomeUsuario(usuarioCriado.getNomeUsuario())
                 .emailUsuario(usuarioCriado.getEmailUsuario())
-                .senhaUsuario(usuarioCriado.getSenhaUsuario())
                 .numeroCelular(usuarioCriado.getNumeroCelular())
                 .build();
     }
