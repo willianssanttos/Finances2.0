@@ -33,19 +33,6 @@ public class RestExceptionHandler {
                 .build();
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-//    @ExceptionHandler(BadCredentialsException.class)
-//    public ResponseEntity<ApiError> badCredentialsException(RuntimeException ex) {
-//        ApiError apiError = ApiError
-//                .builder()
-//                .timestamp(LocalDateTime.now())
-//                .code(HttpStatus.UNAUTHORIZED.value())
-//                .status(HttpStatus.UNAUTHORIZED.name())
-//                .errors(List.of(ex.getMessage()))
-//                .build();
-//        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
-//    }
-
     @ExceptionHandler({
             RoleNotFoundException.class,
             ObterLoginNotFoundException.class,
