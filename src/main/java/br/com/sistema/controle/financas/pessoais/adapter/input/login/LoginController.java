@@ -1,7 +1,7 @@
 package br.com.sistema.controle.financas.pessoais.adapter.input.login;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.login.dto.response.JwtTokenResponse;
-import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
+import br.com.sistema.controle.financas.pessoais.adapter.input.login.dto.response.LoginResponse;
 import br.com.sistema.controle.financas.pessoais.port.input.login.ILogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class LoginController implements ILoginController {
     private ILogin iLogin;
 
     @PostMapping("/usuario")
-    public ResponseEntity<JwtTokenResponse> autenticarUsuario(@RequestBody UsuarioResponse usuarioLogin) {
+    public ResponseEntity<JwtTokenResponse> autenticarUsuario(@RequestBody LoginResponse usuarioLogin) {
         JwtTokenResponse token = iLogin.authenticateUser(usuarioLogin);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }

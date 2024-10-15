@@ -2,10 +2,10 @@ package br.com.sistema.controle.financas.pessoais.adapter.output.conta;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.request.ContaRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.output.mapper.ObterContasRowMapper;
-import br.com.sistema.controle.financas.pessoais.domain.exception.AtualizarContaException;
-import br.com.sistema.controle.financas.pessoais.domain.exception.CriarContaException;
-import br.com.sistema.controle.financas.pessoais.domain.exception.DeletarContaException;
-import br.com.sistema.controle.financas.pessoais.domain.exception.ObterContasNotFoundException;
+import br.com.sistema.controle.financas.pessoais.config.exception.AtualizarContaException;
+import br.com.sistema.controle.financas.pessoais.config.exception.CriarContaException;
+import br.com.sistema.controle.financas.pessoais.config.exception.DeletarContaException;
+import br.com.sistema.controle.financas.pessoais.config.exception.ObterContasNotFoundException;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.IContaRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;

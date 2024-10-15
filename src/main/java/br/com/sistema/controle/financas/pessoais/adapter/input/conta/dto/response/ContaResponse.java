@@ -1,8 +1,7 @@
 package br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response;
 
-import br.com.sistema.controle.financas.pessoais.domain.command.Enum.TipoContaEnum;
+import br.com.sistema.controle.financas.pessoais.domain.Enum.TipoContaEnum;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

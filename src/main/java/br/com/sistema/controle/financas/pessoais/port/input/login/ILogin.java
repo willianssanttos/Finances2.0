@@ -1,9 +1,9 @@
 package br.com.sistema.controle.financas.pessoais.port.input.login;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.login.dto.response.JwtTokenResponse;
-import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
+import br.com.sistema.controle.financas.pessoais.adapter.input.login.dto.response.LoginResponse;
 
 public interface ILogin {
 
-    JwtTokenResponse authenticateUser(UsuarioResponse loginUserDto);
+    JwtTokenResponse authenticateUser(LoginResponse loginUserDto);
 }

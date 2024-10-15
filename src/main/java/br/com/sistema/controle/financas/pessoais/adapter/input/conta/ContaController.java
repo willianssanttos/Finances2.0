@@ -27,10 +27,10 @@ public class ContaController implements IContaController {
     }
 
     @PutMapping("/atualizar-conta/{idConta}")
-    public ResponseEntity<Void> atualizarConta(@PathVariable Integer idConta, @RequestBody ContaRequest conta) {
+    public ResponseEntity<String> atualizarConta(@PathVariable Integer idConta, @RequestBody ContaRequest conta) {
         conta.setIdConta(idConta);
         iConta.editarConta(conta);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(Constantes.ContaEditada);
     }
 
     @GetMapping("/obter-contas/{idUsuario}")

@@ -1,8 +1,8 @@
 package br.com.sistema.controle.financas.pessoais.adapter.output.usuario;
 
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
-import br.com.sistema.controle.financas.pessoais.domain.exception.CriarUsuarioException;
-import br.com.sistema.controle.financas.pessoais.domain.exception.EmailExistenteException;
+import br.com.sistema.controle.financas.pessoais.config.exception.CriarUsuarioException;
+import br.com.sistema.controle.financas.pessoais.config.exception.EmailExistenteException;
 import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioRepository;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 import org.slf4j.Logger;

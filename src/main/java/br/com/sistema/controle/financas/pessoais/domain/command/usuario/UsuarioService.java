@@ -2,9 +2,9 @@ package br.com.sistema.controle.financas.pessoais.domain.command.usuario;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.request.UsuarioRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
-import br.com.sistema.controle.financas.pessoais.domain.command.Enum.RolesEnum;
-import br.com.sistema.controle.financas.pessoais.domain.command.security.config.SecurityConfiguration;
-import br.com.sistema.controle.financas.pessoais.domain.exception.*;
+import br.com.sistema.controle.financas.pessoais.domain.Enum.RolesEnum;
+import br.com.sistema.controle.financas.pessoais.config.security.config.SecurityConfiguration;
+import br.com.sistema.controle.financas.pessoais.config.exception.*;
 import br.com.sistema.controle.financas.pessoais.port.input.usuario.IUsuario;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
 import br.com.sistema.controle.financas.pessoais.port.output.login.ILoginRepository;
@@ -72,7 +72,6 @@ public class UsuarioService implements IUsuario {
         return UsuarioResponse.builder()
                 .nomeUsuario(usuarioCriado.getNomeUsuario())
                 .emailUsuario(usuarioCriado.getEmailUsuario())
-                .senhaUsuario(usuarioCriado.getSenhaUsuario())
                 .numeroCelular(usuarioCriado.getNumeroCelular())
                 .build();
     }

@@ -27,7 +27,7 @@ public interface IContaController {
             @ApiResponse(responseCode = "400", description = "Erro ao atualizar conta!"),
             @ApiResponse(responseCode = "500", description = "Erro interno ao atualizar conta!")
     })
-    ResponseEntity<Void> atualizarConta(@PathVariable Integer idConta, @RequestBody ContaRequest conta);
+    ResponseEntity<String> atualizarConta(@PathVariable Integer idConta, @RequestBody ContaRequest conta);
     @Operation(description = "Operação para listagem de contas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista das contas recuperada com sucesso!"),

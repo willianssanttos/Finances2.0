@@ -1,7 +1,7 @@
 package br.com.sistema.controle.financas.pessoais.adapter.input.login;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.login.dto.response.JwtTokenResponse;
-import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
+import br.com.sistema.controle.financas.pessoais.adapter.input.login.dto.response.LoginResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,5 +16,5 @@ public interface ILoginController {
             @ApiResponse(responseCode = "417", description = "Erro token invalidado ou expirado!"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor ao realizar login!")
     })
-    ResponseEntity<JwtTokenResponse> autenticarUsuario(@RequestBody UsuarioResponse usuarioLogin);
+    ResponseEntity<JwtTokenResponse> autenticarUsuario(@RequestBody LoginResponse usuarioLogin);
 }
