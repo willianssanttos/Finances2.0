@@ -23,13 +23,12 @@ public class JwtTokenService {
     public String generateJwtToken(UserDetailsImpl login) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
-            String token = JWT.create()
+            return JWT.create()
                     .withIssuer(EMISSOR)
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(Instant.now().plus(4, ChronoUnit.HOURS))
                     .withSubject(login.getUsername())
                     .sign(algorithm);
-            return token;
         } catch (JWTCreationException exception){
             throw new JWTCreationException(Constantes.GerarToken, exception);
         }
