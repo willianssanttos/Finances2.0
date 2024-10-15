@@ -50,17 +50,16 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(csrf -> csrf.disable()) // Desativa a proteção contra CSRF
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))// Configura a política de criação de sessão como stateless
-                .authorizeHttpRequests(authorize -> authorize // Habilita a autorização para as requisições HTTP
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(ENDPOINTS_COM_AUTENTICACAO_NAO_OBRIGATORIA).permitAll()
-                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui/index.html**").permitAll()
                 .requestMatchers(HttpMethod.GET, ENDPOINTS_COM_AUTENTICACAO_NECESSARIA_PARA_LISTAR).hasAuthority("ROLE_CLIENTE")
                 .requestMatchers(HttpMethod.POST, ENDPOINTS_COM_AUTENTICACAO_NECESSARIO_PARA_CRIAR).hasAuthority("ROLE_CLIENTE")
                 .requestMatchers(HttpMethod.DELETE, ENDPOINTS_COM_AUTENTICACAO_NECESSARIO_PARA_DELETAR).hasAuthority("ROLE_CLIENTE")
                 .anyRequest().authenticated()
                 )
-                // Adiciona o filtro de autenticação de usuário que criamos antes do filtro de segurança padrão do Spring Security
+
                 .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

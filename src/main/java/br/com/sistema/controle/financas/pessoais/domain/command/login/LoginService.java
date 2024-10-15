@@ -25,13 +25,13 @@ public class LoginService implements ILogin {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUserDto.getEmailUsuario(), loginUserDto.getSenhaUsuario());
 
-        // Autentica o usuário com as credenciais fornecidas
+
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
         // Obtém o objeto UserDetails do usuário autenticado
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        // Gera um token JWT para o usuário autenticado
+
         return new JwtTokenResponse(jwtTokenService.generateJwtToken(userDetails));
     }
 }
