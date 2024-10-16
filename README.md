@@ -31,8 +31,6 @@ O Sistema de Controle Financeiro Pessoal é uma API desenvolvida em Java utiliza
 
 ## Tecnologias Utilizadas
 
-# Segurança e Padrões de Projeto
-
 - Spring Security: Implementa autenticação e autorização de usuários.
 - JWT: Utilizado para controle de acesso a endpoints e autenticação de sessões.
 - Java 17
