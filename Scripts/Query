@@ -1,14 +1,3 @@
-
--- Tabela Roles
-CREATE TABLE Roles (
-    nr_id_roles SERIAL PRIMARY KEY,
-    nm_roles VARCHAR(255) NOT NULL
-);
-
-INSERT INTO Roles (nm_roles) VALUES ('ROLE_CLIENTE');
-INSERT INTO Roles (nm_roles) VALUES ('ROLE_MODERADOR');
-INSERT INTO Roles (nm_roles) VALUES ('ROLE_ADMINISTRADOR');
-
 -- Tabela de Usuários
 CREATE TABLE Usuarios (
     nr_id_usuario SERIAL PRIMARY KEY,
