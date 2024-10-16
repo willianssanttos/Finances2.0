@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ObterContasUsuarioResponse {
 
-    private Double saldo;
-    private List<ContaEntity> contas;
+    private Double saldoTotal;
+    private List<ContaSimplificadaResponse> contas;
 }

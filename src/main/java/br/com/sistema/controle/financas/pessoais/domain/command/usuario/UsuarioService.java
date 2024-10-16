@@ -2,9 +2,12 @@ package br.com.sistema.controle.financas.pessoais.domain.command.usuario;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.request.UsuarioRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.usuario.dto.response.UsuarioResponse;
-import br.com.sistema.controle.financas.pessoais.domain.exception.*;
+import br.com.sistema.controle.financas.pessoais.domain.Enum.RolesEnum;
+import br.com.sistema.controle.financas.pessoais.config.security.config.SecurityConfiguration;
+import br.com.sistema.controle.financas.pessoais.config.exception.*;
 import br.com.sistema.controle.financas.pessoais.port.input.usuario.IUsuario;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
+import br.com.sistema.controle.financas.pessoais.port.output.login.ILoginRepository;
 import br.com.sistema.controle.financas.pessoais.port.output.usuario.IUsuarioRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.SaldoEntity;
 import br.com.sistema.controle.financas.pessoais.domain.entity.usuario.UsuarioEntity;
@@ -24,9 +27,14 @@ import java.time.LocalDateTime;
 @Service
 public class UsuarioService implements IUsuario {
     @Autowired
+    private ILoginRepository iLoginRepository;
+    @Autowired
     private IUsuarioRepository iUsuarioRepository;
     @Autowired
     private ISaldoRepository iSaldoRepository;
+    @Autowired
+    private SecurityConfiguration securityConfiguration;
+
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
     public UsuarioResponse criarUsuario(UsuarioRequest usuario) {
@@ -36,13 +44,15 @@ public class UsuarioService implements IUsuario {
 
         try {
             UsuarioEntity novoUsuario = UsuarioEntity.builder()
+                    .role(String.valueOf(RolesEnum.ROLE_CLIENTE))
                     .nomeUsuario(usuario.getNomeUsuario())
                     .emailUsuario(usuario.getEmailUsuario())
-                    .senhaUsuario(usuario.getSenhaUsuario())
+                    .senhaUsuario(securityConfiguration.passwordEncoder().encode(usuario.getSenhaUsuario()))
                     .numeroCelular(ValidarNumeroCelular.formatarNumeroCelular(usuario.getNumeroCelular()))
                     .build();
 
-            UsuarioEntity usuarioCriado =  iUsuarioRepository.criarUsuario(novoUsuario);
+
+            UsuarioEntity usuarioCriado = iUsuarioRepository.criarUsuario(novoUsuario);
 
             SaldoEntity inserirSaldo = SaldoEntity.builder()
                     .idUsuario(usuarioCriado.getIdUsuario())
@@ -62,7 +72,6 @@ public class UsuarioService implements IUsuario {
         return UsuarioResponse.builder()
                 .nomeUsuario(usuarioCriado.getNomeUsuario())
                 .emailUsuario(usuarioCriado.getEmailUsuario())
-                .senhaUsuario(usuarioCriado.getSenhaUsuario())
                 .numeroCelular(usuarioCriado.getNumeroCelular())
                 .build();
     }
@@ -90,4 +99,5 @@ public class UsuarioService implements IUsuario {
             throw new NumeroCelularValidacaoException();
         }
     }
+
 }

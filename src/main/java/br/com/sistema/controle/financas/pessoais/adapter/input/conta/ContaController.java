@@ -5,6 +5,7 @@ import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.respons
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response.ObterContasUsuarioResponse;
 import br.com.sistema.controle.financas.pessoais.port.input.conta.IConta;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.ISaldoRepository;
+import br.com.sistema.controle.financas.pessoais.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +27,16 @@ public class ContaController implements IContaController {
     }
 
     @PutMapping("/atualizar-conta/{idConta}")
-    public ResponseEntity<Void> atualizarConta(@PathVariable Integer idConta, @RequestBody ContaRequest conta) {
+    public ResponseEntity<String> atualizarConta(@PathVariable Integer idConta, @RequestBody ContaRequest conta) {
         conta.setIdConta(idConta);
         iConta.editarConta(conta);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(Constantes.ContaEditada);
     }
 
-    @GetMapping("obter-contas/{idUsuario}")
-    public ResponseEntity<ObterContasUsuarioResponse> obterContas(@PathVariable Integer idUsuario){
-        ObterContasUsuarioResponse response = iConta.obterContasUsuario(idUsuario);
+    @GetMapping("/obter-contas/{idUsuario}")
+    public ResponseEntity<ObterContasUsuarioResponse> obterContas(@RequestHeader("Authorization") String token,
+                                                                  @PathVariable Integer idUsuario){
+        ObterContasUsuarioResponse response = iConta.obterContasUsuario(token, idUsuario);
         return ResponseEntity.ok(response);
     }
 

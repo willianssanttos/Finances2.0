@@ -1,24 +1,26 @@
-CREATE OR REPLACE FUNCTION inserir_usuario(nm_nome VARCHAR, ds_email VARCHAR, ds_senha VARCHAR, ds_telefone VARCHAR)
+CREATE OR REPLACE FUNCTION inserir_usuario(nm_roles VARCHAR, nm_nome VARCHAR, ds_email VARCHAR, ds_senha VARCHAR, ds_telefone VARCHAR)
 RETURNS INT AS $$
 DECLARE
 	new_id INT;
 BEGIN
-    INSERT INTO usuarios (nm_nome, ds_email, ds_senha, ds_telefone)
-    VALUES (nm_nome, ds_email, ds_senha, ds_telefone)
+    INSERT INTO usuarios (nm_roles, nm_nome, ds_email, ds_senha, ds_telefone)
+    VALUES (nm_roles, nm_nome, ds_email, ds_senha, ds_telefone)
 	RETURNING nr_id_usuario INTO new_id;
 	RETURN new_id;
 END;
 $$ LANGUAGE plpgsql;
 
+
 CREATE OR REPLACE FUNCTION validar_login(p_email VARCHAR)
 RETURNS TABLE (
     nr_id_usuario INTEGER,
     ds_email VARCHAR,
-    ds_senha VARCHAR
+    ds_senha VARCHAR,
+    nm_roles VARCHAR
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT u.nr_id_usuario, u.ds_email, u.ds_senha
+    SELECT u.nr_id_usuario, u.ds_email, u.ds_senha, u.nm_roles
     FROM usuarios u
     WHERE u.ds_email = p_email;
 END;

@@ -2,10 +2,10 @@ package br.com.sistema.controle.financas.pessoais.domain.command.transacao;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.transacao.request.TransacaoRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.transacao.response.TransacaoResponse;
-import br.com.sistema.controle.financas.pessoais.domain.command.Enum.CategoriaEnum;
+import br.com.sistema.controle.financas.pessoais.domain.Enum.CategoriaEnum;
 import br.com.sistema.controle.financas.pessoais.domain.entity.transacao.ExtratoTransacaoEntity;
-import br.com.sistema.controle.financas.pessoais.domain.exception.CarregarExtratoNotFoundException;
-import br.com.sistema.controle.financas.pessoais.domain.exception.CriarTransacaoException;
+import br.com.sistema.controle.financas.pessoais.config.exception.CarregarExtratoNotFoundException;
+import br.com.sistema.controle.financas.pessoais.config.exception.CriarTransacaoException;
 import br.com.sistema.controle.financas.pessoais.port.input.transacao.ITransacao;
 import br.com.sistema.controle.financas.pessoais.port.output.transacao.ITransacaoContaRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.transacao.TransacoesContaEntity;
@@ -30,8 +30,8 @@ public class TransacaoService implements ITransacao {
              logger.info(Constantes.DebugRegistroProcesso);
         try {
             TransacoesContaEntity novaTransacao = TransacoesContaEntity.builder()
-                    .idConta(transacao.getIdConta())
                     .idSaldo(transacao.getIdSaldo())
+                    .idConta(transacao.getIdConta())
                     .Descricao(transacao.getDescricao())
                     .Categoria(String.valueOf(CategoriaEnum.valueOf(transacao.getCategoria())))
                     .Valor(transacao.getValor())

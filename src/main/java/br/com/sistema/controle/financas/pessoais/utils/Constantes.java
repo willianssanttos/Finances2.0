@@ -52,9 +52,14 @@ public class Constantes {
 
 ///Login ////
 
-    public static final String loginConta = "Login realizado com sucesso!";
+    public static final String Token = "Token inválido ou expirado!";
+
+    public static final String ErroRole = "Erro role não localizada no servidor!";
     public static final String erroLoginConta = "Usuário ou senha incorretos!";
-    public static final String tipoTransacao = "Tipo transação invalido! Valores permitidos. Use 1 para receitas ou 2 para despesas!";
+    public static final String GerarToken = "Erro ao gerar token.";
+    public static final String GToken = "Token ausente.";
+
+
     public static final String cadastroTransacao = "Transação registrada com sucesso!";
     public static final String ErroCadastroTransacao = "Erro ao realizar registro transação!";
     public static final String ErrorRecuperarSaldo = "Erro ao recuperar o id do usuario, para obter o saldo!";
@@ -66,7 +71,7 @@ public class Constantes {
     public static final String contaNaoEncontrada = "Nenhuma conta encontrada para o usuário!";
     public static final String criarConta = "Cadastre uma conta, e começe acompanhar sua vida financeira!";
     public static final String cadastroNomeConta = "Insira o nome da conta";
-    public static final String cadastroTipoConta = "Tipo contas invalido! Valores permitidos: CORRENTE\", \"POUPANÇA\", \"INVESTIMENTO, \"BENEFICIOS, \"OUTROS";
+    public static final String cadastroTipoConta = "Tipo contas invalido! Valores permitidos: CORRENTE\", \"POUPANCA\", \"INVESTIMENTO, \"BENEFICIOS, \"OUTROS";
     public static final String cadastroSaldo = "O valor invalido!";
     public static final String cadastroConta = "Conta adicionada com sucesso!";
 

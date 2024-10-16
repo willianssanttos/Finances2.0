@@ -2,10 +2,11 @@ package br.com.sistema.controle.financas.pessoais.domain.command.conta;
 
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.request.ContaRequest;
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response.ContaResponse;
+import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response.ContaSimplificadaResponse;
 import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.response.ObterContasUsuarioResponse;
-import br.com.sistema.controle.financas.pessoais.domain.command.Enum.TipoContaEnum;
+import br.com.sistema.controle.financas.pessoais.domain.Enum.TipoContaEnum;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.TipoContaEntity;
-import br.com.sistema.controle.financas.pessoais.domain.exception.*;
+import br.com.sistema.controle.financas.pessoais.config.exception.*;
 import br.com.sistema.controle.financas.pessoais.port.input.conta.IConta;
 import br.com.sistema.controle.financas.pessoais.port.output.conta.IContaRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.conta.ContaEntity;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ContaService implements IConta {
@@ -42,6 +44,7 @@ public class ContaService implements IConta {
 
         try {
             ContaEntity novaConta = ContaEntity.builder()
+
                     .idUsuario(conta.getIdUsuario())
                     .idSaldo(conta.getIdSaldo())
                     .nomeConta(conta.getNomeConta())
@@ -68,12 +71,17 @@ public class ContaService implements IConta {
                 .build();
     }
 
-    public ObterContasUsuarioResponse obterContasUsuario(Integer idUsario){
+    public ObterContasUsuarioResponse obterContasUsuario(String token, Integer idUsario){
+
         logger.info(Constantes.DebugBuscarProcesso);
         try {
             Double saldo = iSaldoRepository.obterSaldoPorIdUsuario(idUsario);
             List<ContaEntity> contas = iContaRepository.obterContasPorUsuario(idUsario);
-            return new ObterContasUsuarioResponse(saldo, contas);
+
+            List<ContaSimplificadaResponse> contasSimplificadas = contas.stream()
+                    .map(ContaSimplificadaResponse::new)
+                    .collect(Collectors.toList());
+            return new ObterContasUsuarioResponse(saldo, contasSimplificadas);
 
         } catch (Exception e){
             logger.error(Constantes.ErrorRecuperarContas, e.getMessage());

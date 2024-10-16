@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface IContaController {
 
@@ -26,13 +27,14 @@ public interface IContaController {
             @ApiResponse(responseCode = "400", description = "Erro ao atualizar conta!"),
             @ApiResponse(responseCode = "500", description = "Erro interno ao atualizar conta!")
     })
-    ResponseEntity<Void> atualizarConta(@PathVariable Integer idConta, @RequestBody ContaRequest conta);
+    ResponseEntity<String> atualizarConta(@PathVariable Integer idConta, @RequestBody ContaRequest conta);
     @Operation(description = "Operação para listagem de contas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista das contas recuperada com sucesso!"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor ao listar contas!")
     })
-    ResponseEntity<ObterContasUsuarioResponse> obterContas(@PathVariable Integer idUsuario);
+    public ResponseEntity<ObterContasUsuarioResponse> obterContas(@RequestHeader("Authorization") String token,
+                                                                  @PathVariable Integer idUsuario);
 
     @Operation(description = "Operação para deletar conta ")
     @ApiResponses(value = {

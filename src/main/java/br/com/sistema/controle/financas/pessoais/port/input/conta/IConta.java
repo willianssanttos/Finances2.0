@@ -7,7 +7,7 @@ import br.com.sistema.controle.financas.pessoais.adapter.input.conta.dto.respons
 public interface IConta {
 
     ContaResponse criarConta(ContaRequest conta);
-    ObterContasUsuarioResponse obterContasUsuario(Integer idUsario);
+    ObterContasUsuarioResponse obterContasUsuario(String token, Integer idUsario);
     void editarConta(ContaRequest conta);
     void excluirConta(Integer idConta);
 }

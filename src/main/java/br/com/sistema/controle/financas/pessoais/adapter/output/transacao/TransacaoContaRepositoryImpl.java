@@ -2,8 +2,8 @@ package br.com.sistema.controle.financas.pessoais.adapter.output.transacao;
 
 import br.com.sistema.controle.financas.pessoais.adapter.output.mapper.ExtratoTransacaoRowMapper;
 import br.com.sistema.controle.financas.pessoais.domain.entity.transacao.ExtratoTransacaoEntity;
-import br.com.sistema.controle.financas.pessoais.domain.exception.CarregarExtratoNotFoundException;
-import br.com.sistema.controle.financas.pessoais.domain.exception.CriarTransacaoException;
+import br.com.sistema.controle.financas.pessoais.config.exception.CarregarExtratoNotFoundException;
+import br.com.sistema.controle.financas.pessoais.config.exception.CriarTransacaoException;
 import br.com.sistema.controle.financas.pessoais.port.output.transacao.ITransacaoContaRepository;
 import br.com.sistema.controle.financas.pessoais.domain.entity.transacao.TransacoesContaEntity;
 import br.com.sistema.controle.financas.pessoais.utils.Constantes;
@@ -31,8 +31,8 @@ public class TransacaoContaRepositoryImpl implements ITransacaoContaRepository {
         try {
             String sql = "SELECT inserir_transacao(?,?,?,?,?,?,?)";
             Integer idTransacao = jdbcTemplate.queryForObject(sql, new Object[] {
-                    transacao.getIdConta(),
                     transacao.getIdSaldo(),
+                    transacao.getIdConta(),
                     transacao.getDescricao(),
                     transacao.getCategoria(),
                     transacao.getValor(),
