@@ -13,7 +13,7 @@ public class ExtratoTransacaoRowMapper implements RowMapper<ExtratoTransacaoEnti
         extrato.setDescricao(rs.getString(2));
         extrato.setCategoria(rs.getString(3));
         extrato.setValor(rs.getDouble(4));
-        extrato.setDataMovimentacao(rs.getTimestamp(5));
+        extrato.setDataMovimentacao(rs.getTimestamp(5).toLocalDateTime());
         extrato.setTipoTransacao(rs.getInt(6) == 1 ? "Ganho" : "Gasto");
         extrato.setTipoConta(rs.getString(7));
         return extrato;

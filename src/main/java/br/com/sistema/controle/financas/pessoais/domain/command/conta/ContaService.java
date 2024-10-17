@@ -67,7 +67,7 @@ public class ContaService implements IConta {
                 .nomeConta(contaCriada.getNomeConta())
                 .tipoConta(TipoContaEnum.valueOf(tipoConta.getNomeTipoConta()))
                 .saldoConta(contaCriada.getSaldoConta())
-                .dataDeposito(contaCriada.getDataDeposito())
+                .dataDeposito(contaCriada.getDataDeposito().toLocalDateTime())
                 .build();
     }
 

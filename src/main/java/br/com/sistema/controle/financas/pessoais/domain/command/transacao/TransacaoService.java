@@ -36,7 +36,7 @@ public class TransacaoService implements ITransacao {
                     .Categoria(String.valueOf(CategoriaEnum.valueOf(transacao.getCategoria())))
                     .Valor(transacao.getValor())
                     .tipo(transacao.getTipo())
-                    .dataMovimentacao(Timestamp.valueOf(LocalDateTime.now()))
+                    .dataMovimentacao(LocalDateTime.now())
                     .build();
 
             TransacoesContaEntity realizarTransacao = iTransacaoContaRepository.inserirTransacao(novaTransacao);
@@ -54,7 +54,7 @@ public class TransacaoService implements ITransacao {
                 .Categoria(String.valueOf(CategoriaEnum.valueOf(realizarTransacao.getCategoria())))
                 .Valor(realizarTransacao.getValor())
                 .tipo(realizarTransacao.getTipo())
-                .dataMovimentacao(Timestamp.valueOf(LocalDateTime.now()))
+                .dataMovimentacao(LocalDateTime.now())
                 .build();
     }
 
