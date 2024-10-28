@@ -71,12 +71,12 @@ public class ContaService implements IConta {
                 .build();
     }
 
-    public ObterContasUsuarioResponse obterContasUsuario(String token, Integer idUsario){
+    public ObterContasUsuarioResponse obterContasUsuario(String token, Integer idUsuario){
 
         logger.info(Constantes.DebugBuscarProcesso);
         try {
-            Double saldo = iSaldoRepository.obterSaldoPorIdUsuario(idUsario);
-            List<ContaEntity> contas = iContaRepository.obterContasPorUsuario(idUsario);
+            Double saldo = iSaldoRepository.obterSaldoPorIdUsuario(idUsuario);
+            List<ContaEntity> contas = iContaRepository.obterContasPorUsuario(idUsuario);
 
             List<ContaSimplificadaResponse> contasSimplificadas = contas.stream()
                     .map(ContaSimplificadaResponse::new)
