@@ -99,5 +99,4 @@ public class UsuarioService implements IUsuario {
             throw new NumeroCelularValidacaoException();
         }
     }
-
 }
